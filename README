@@ -1,0 +1,28 @@
+DEPENDENCIES
+----------------------------------------------------------------
+Java and Javac must be version 1.7 or above.
+
+Java libraries:
+* Selenium client and webdriver bindings
+	- http://docs.seleniumhq.org/download/ (You want the Java Client & WebDriver language bindings, obviously)
+
+* args4j
+	- http://args4j.kohsuke.org/
+
+* Jetty
+	- Ships bundled with Eclipse (suggested option) http://www.eclipse.org/
+
+* JDBC driver 
+	- http://msdn.microsoft.com/en-us/sqlserver/aa937724(v=msdn.10).aspx
+	
+* Freemarker templating engine 
+	- http://freemarker.org/
+	
+* JavaMail 
+	- http://www.oracle.com/technetwork/java/javamail/index.html
+
+
+TODO
+----------------------------------------------------------------
+* Handle non-existing sites
+* Check for empty test list
