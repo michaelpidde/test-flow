@@ -1,0 +1,26 @@
+This is a basic web GUI automation framework utilizing Java and Selenium.
+
+
+USAGE WEIRDNESS
+----------------------------------------------------------------
+* You must copy the browser executables from /exe to the same directory where your jar lives.
+
+* Run Maven compile with assembly:single to grab all dependencies and move some static files to the right place.
+
+* Run with:
+java -cp [jar_name] com.michaelpidde.automated.TestCLI --frontend
+
+
+DEPENDENCIES
+----------------------------------------------------------------
+Java and Javac must be version 1.7 or above.
+
+These are all handled by Maven if you choose to use it (why would you not?):
+
+* Selenium client and webdriver bindings
+* args4j
+* Jetty
+* Freemarker templating engine
+* JavaMail
+(Not currently used, but will be in the future:)
+* JDBC driver
