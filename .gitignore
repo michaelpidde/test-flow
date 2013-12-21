@@ -1,8 +1,6 @@
 *.class
-*.ear
-*.war
 *.classpath
 *.project
 
 /.settings
-/bin
+/target
