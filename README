@@ -1,7 +1,7 @@
 This is a basic web GUI test automation framework utilizing Java and Selenium.
 
 
-USAGE WEIRDNESS
+USAGE
 ----------------------------------------------------------------
 * You must copy the browser executables from /exe to the same directory where your jar lives.
 
