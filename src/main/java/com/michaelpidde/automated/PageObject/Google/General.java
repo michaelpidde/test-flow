@@ -1,4 +1,4 @@
-package com.michaelpidde.automated.PageObject.mlsfinder;
+package com.michaelpidde.automated.PageObject.Google;
 
 import com.michaelpidde.automated.util.TestException;
 

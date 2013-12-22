@@ -1,6 +1,6 @@
 package com.michaelpidde.automated.tests.general;
 
-import com.michaelpidde.automated.PageObject.mlsfinder.General;
+import com.michaelpidde.automated.PageObject.Google.General;
 import com.michaelpidde.automated.util.Test;
 import com.michaelpidde.automated.util.Logger;
 import com.michaelpidde.automated.util.TestException;

@@ -66,4 +66,13 @@ public class XMLParser {
 		
 		return nodes;
 	}
+
+
+
+	public static String getNodeValueAsString(URL xmlFile, String path) {
+		String nodeValue = "";
+		NodeList nodes = getNodeList(xmlFile, path);
+
+		return nodes.item(0).getTextContent();
+	}
 }

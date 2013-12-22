@@ -1,20 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- This list of tests exists because I haven't found any good ways to scan the classes directory in Coldfusion,
-nor is there a good way to list the available classes from a Java package. -->
 <Apps>
-	<mlsfinder>
+	<Google>
+		<BaseUrl>http://google.com/</BaseUrl>
 		<Suites>
-			<DBSmokeTest>
-				<DBSmokeTest />
-			</DBSmokeTest>
+			<TestSuite>
+				<TestSuite />
+			</TestSuite>
 		</Suites>
 		<AllTests>
-			<HasListings />
-			<HasSingleFamily />
-			<ImplicitFail />
+			<SearchMamaJama />
+			<SearchNoResults />
 		</AllTests>
-	</mlsfinder>
-	<wordpress>
-		<tests></tests>
-	</wordpress>
+	</Google>
+	<Wordpress>
+		<BaseUrl></BaseUrl>
+		<AllTests></AllTests>
+	</Wordpress>
 </Apps>

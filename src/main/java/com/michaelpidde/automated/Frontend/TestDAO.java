@@ -25,4 +25,10 @@ public class TestDAO extends XMLParser {
 	public static ArrayList<String> getTests(String app) {
 		return getNodeNamesAsList(testXml, "/Apps/" + app + "/AllTests/*");
 	}
+
+
+
+	public static String getBaseUrl(String app) {
+		return getNodeValueAsString(testXml, "/Apps/" + app + "/*");
+	}
 }

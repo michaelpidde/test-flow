@@ -112,18 +112,25 @@ public class TestSuite {
 		// Start test suite run.
 		driver.get(baseUrl);
 		
+
+		/*
+		 * This is not used currently. It's a step retained from legacy code, but I want
+		 * to leave it for now due to its potentially useful nature. A better way to do
+		 * this would be to change it to a test of the baseUrl and checking by response
+		 * (i.e. 404, 500, 501, etc.).
+		 */
 		// Do a quick smoke test to see if the URL has any errors on it.
-		CFError cferror = new CFError(driver, baseUrl, logger);
-		boolean error = false;
-		try {
-			error = cferror.run();
-		} catch(TestException e) {
-			// Don't do anything with this error at this time.
-		}
+		// CFError cferror = new CFError(driver, baseUrl, logger);
+		// boolean error = false;
+		// try {
+		// 	error = cferror.run();
+		// } catch(TestException e) {
+		// 	// Don't do anything with this error at this time.
+		// }
 		
-		if(error) {
-			runSuite = false;
-		}
+		// if(error) {
+		//	runSuite = false;
+		// }
 	}
 
 

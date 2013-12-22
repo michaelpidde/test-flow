@@ -34,8 +34,11 @@ public class PageHandler extends AbstractHandler {
 		response.setStatus(HttpServletResponse.SC_OK);
 		baseRequest.setHandled(true);
 		
+		// Set up param defaults
 		String action = request.getParameter("action");
 		action = (action == null) ? "ListApps" : action;
+		String selectedApp = request.getParameter("app");
+		selectedApp = (selectedApp == null) ? "Google" : selectedApp;
 		
 		PrintWriter writer = response.getWriter();
 		// Set up Freemarker template config
@@ -61,13 +64,9 @@ public class PageHandler extends AbstractHandler {
 				System.out.println(e.toString());
 			}
 		} else if(action.equals("ListSuites")) {
-			String selectedApp = request.getParameter("app");
-			/* This used to be handled in a biz logic DAO. */
-			ArrayList<String> markets = new ArrayList<String>(Arrays.asList("mn_rmls"));
 			ArrayList<String> suites = TestDAO.getSuites(selectedApp);
 			ArrayList<String> tests = TestDAO.getTests(selectedApp);
 			root.put("suites", suites);
-			root.put("markets", markets);
 			root.put("tests", tests);
 			template = config.getTemplate("ListSuites.ftl");
 			try {
@@ -78,16 +77,6 @@ public class PageHandler extends AbstractHandler {
 		} else if(action.equals("run")) {
 			String runSuite = request.getParameter("suite");
 			if(runSuite != null) {
-				/*HashMap<String, ArrayList<String>> staff = MlsfinderDAO.getStaffMarkets();
-				Iterator<Entry<String, ArrayList<String>>> iterator = staff.entrySet().iterator();
-				while(iterator.hasNext()) {
-					Map.Entry<String, ArrayList<String>> element = (Map.Entry<String, ArrayList<String>>)iterator.next();
-					System.out.println("Staff Member: " + element.getKey());
-					for(String url : element.getValue()) {
-						System.out.println(url);
-					}
-				}*/
-				
 				// TODO Implement suite logic.
 			} else {
 				String selectedMarkets = request.getParameter("selectedMarkets");
@@ -99,10 +88,8 @@ public class PageHandler extends AbstractHandler {
 				
 				TestCLI cli = new TestCLI();
 				
-				ArrayList<String> args = new ArrayList<String>(Arrays.asList("-e", "-s", "mlsfinder", "-b", "ff", "-u", 
-					generateMlsfinderUrlString(new ArrayList<String>(Arrays.asList(selectedMarkets.split(","))), "live"), 
-					"-t", selectedTests
-				));
+				ArrayList<String> args = new ArrayList<String>(Arrays.asList("-e", "-s", selectedApp, "-b", "ff", "-u", 
+					TestDAO.getBaseUrl(selectedApp), "-t", selectedTests));
 				if(logResults) {
 					args.add("-l");
 				}

@@ -12,13 +12,6 @@
 		<br />
 		
 		<fieldset><legend>Roll Your Own</legend>
-			<label for="market">Select Market: </label>
-			<select name="markets" id="markets" multiple="multiple">
-				<#list markets as market>
-				<option value="${market}">${market}</option>
-				</#list>
-			</select>
-			<br />
 			<table cellpadding="1" cellspacing="0" border="1">
 				<tr>
 					<th>Test</th>
