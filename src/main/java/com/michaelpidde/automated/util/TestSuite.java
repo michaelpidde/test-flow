@@ -43,9 +43,19 @@ public class TestSuite {
 		this.baseUrl = baseUrl;
 		this.suite = suite;
 		this.logResults = logScreens;
+
+		/* TODO: Clean this up. There should be a less gross way to do this. */
 		this.runPath = new java.io.File(
 			TestCLI.class.getProtectionDomain().getCodeSource().getLocation().getPath()
 		).toString().replace("%20", " ");
+
+		ArrayList<String> pathParts = new ArrayList<String>(Arrays.asList(runPath.split("/")));
+		pathParts.remove(pathParts.size()-1);
+		String path = "";
+		for(String part : pathParts) {
+			path += "/" + part;
+		}
+		this.runPath = path;
 	}
 	
 	

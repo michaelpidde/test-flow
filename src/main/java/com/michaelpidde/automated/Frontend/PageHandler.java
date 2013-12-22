@@ -35,7 +35,6 @@ public class PageHandler extends AbstractHandler {
 		baseRequest.setHandled(true);
 		
 		String action = request.getParameter("action");
-		System.out.println(action);
 		action = (action == null) ? "ListApps" : action;
 		
 		PrintWriter writer = response.getWriter();
@@ -48,10 +47,10 @@ public class PageHandler extends AbstractHandler {
 		
 		// Set up data for template
 		Map<String, Serializable> root = new HashMap<String, Serializable>();
-		root.put("title", "Wolfnet Regression Testing");
+		root.put("title", "TestFlow");
 		Template template;
 		
-		if(action == "ListApps") {
+		if(action.equals("ListApps")) {
 			ArrayList<String> apps = TestDAO.getApps();
 			root.put("apps", apps);
 			
@@ -61,7 +60,7 @@ public class PageHandler extends AbstractHandler {
 			} catch(TemplateException e) {
 				System.out.println(e.toString());
 			}
-		} else if(action == "ListSuites") {
+		} else if(action.equals("ListSuites")) {
 			String selectedApp = request.getParameter("app");
 			/* This used to be handled in a biz logic DAO. */
 			ArrayList<String> markets = new ArrayList<String>(Arrays.asList("mn_rmls"));
@@ -76,7 +75,7 @@ public class PageHandler extends AbstractHandler {
 			} catch(TemplateException e) {
 				System.out.println(e.toString());
 			}
-		} else if(action == "run") {
+		} else if(action.equals("run")) {
 			String runSuite = request.getParameter("suite");
 			if(runSuite != null) {
 				/*HashMap<String, ArrayList<String>> staff = MlsfinderDAO.getStaffMarkets();
@@ -100,7 +99,7 @@ public class PageHandler extends AbstractHandler {
 				
 				TestCLI cli = new TestCLI();
 				
-				ArrayList<String> args = new ArrayList<String>(Arrays.asList("-e", "-s", "mlsfinder", "-b", "chrome", "-u", 
+				ArrayList<String> args = new ArrayList<String>(Arrays.asList("-e", "-s", "mlsfinder", "-b", "ff", "-u", 
 					generateMlsfinderUrlString(new ArrayList<String>(Arrays.asList(selectedMarkets.split(","))), "live"), 
 					"-t", selectedTests
 				));
@@ -117,7 +116,7 @@ public class PageHandler extends AbstractHandler {
 					writer.println("<hr />");
 				}
 			}
-		} else if(action == "exit") {
+		} else if(action.equals("exit")) {
 			System.exit(0);
 		}
 	}
