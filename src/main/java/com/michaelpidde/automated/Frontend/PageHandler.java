@@ -79,16 +79,15 @@ public class PageHandler extends AbstractHandler {
 			if(runSuite != null) {
 				// TODO Implement suite logic.
 			} else {
-				String selectedMarkets = request.getParameter("selectedMarkets");
 				String selectedTests = request.getParameter("selectedTests");
-				//String selectedBrowser = request.getParameter("browser");
+				String selectedBrowser = request.getParameter("browser");
 				//String selectedEnvironment = request.getParameter("environment");
 				Boolean logResults = checkboxToBoolean(request.getParameter("logResults"));
 				//Boolean sendMail =  checkboxToBoolean(request.getParameter("sendMail"));
 				
 				TestCLI cli = new TestCLI();
-				
-				ArrayList<String> args = new ArrayList<String>(Arrays.asList("-e", "-s", selectedApp, "-b", "ff", "-u", 
+
+				ArrayList<String> args = new ArrayList<String>(Arrays.asList("-e", "-s", selectedApp, "-b", selectedBrowser, "-u", 
 					TestDAO.getBaseUrl(selectedApp), "-t", selectedTests));
 				if(logResults) {
 					args.add("-l");
@@ -112,25 +111,6 @@ public class PageHandler extends AbstractHandler {
 	
 	private Boolean checkboxToBoolean(String value) {
 		return (value == null) ? false : true;
-	}
-	
-	
-	
-	private String generateMlsfinderUrlString(ArrayList<String> markets, String environment) {
-		String output = "";
-		String subdomain = "";
-
-		/* Removed some conditions from this */
-		if(environment == "live") {
-			subdomain += "www";
-		}
-		
-		for(String market : markets) {
-			output += String.format("http://%s.mlsfinder.com/%s/wordpressplugincobrandsite/index.cfm?resetform=y,", subdomain, market);
-		}
-		output = output.substring(0, output.length()-1);
-		
-		return output;
 	}
 	
 }
