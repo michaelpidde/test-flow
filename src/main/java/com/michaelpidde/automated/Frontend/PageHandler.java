@@ -37,6 +37,10 @@ public class PageHandler extends AbstractHandler {
 		// Set up param defaults
 		String action = request.getParameter("action");
 		action = (action == null) ? "ListApps" : action;
+
+		/*
+		 * This one needs to be saved in session since it's used in two actions below.
+		 */
 		String selectedApp = request.getParameter("app");
 		selectedApp = (selectedApp == null) ? "Google" : selectedApp;
 		

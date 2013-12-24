@@ -67,9 +67,9 @@ public class TestSuite {
 
 
 	public void setup() {
-		if(browser == "ff") {
+		if(browser.equals("ff")) {
 			driver = new FirefoxDriver();
-		} else if(browser == "ie") {
+		} else if(browser.equals("ie")) {
 			try {
 				service = new InternetExplorerDriverService.Builder()
 					.usingDriverExecutable(new File(runPath + "\\IEDriverServer.exe"))
@@ -85,7 +85,7 @@ public class TestSuite {
 			} catch (IOException e) {
 				System.out.println(e.toString());
 			}
-		} else if(browser == "chrome") {
+		} else if(browser.equals("chrome")) {
 			try {
 				service = new ChromeDriverService.Builder()
 					.usingDriverExecutable(new File(runPath + "\\chromedriver.exe"))
@@ -184,11 +184,11 @@ public class TestSuite {
 	public void teardown() {
 		logger.dump();
 		
-		if(browser == "chrome") {
+		if(browser.equals("chrome")) {
 			((ChromeDriverService) service).stop();
-		} else if(browser == "ie") {
+		} else if(browser.equals("ie")) {
 			((InternetExplorerDriverService) service).stop();
-		} else if(browser == "ff") {
+		} else if(browser.equals("ff")) {
 			driver.quit();
 		}
 	}
