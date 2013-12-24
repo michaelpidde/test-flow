@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+	<global>
+		<database>
+			<server></server>
+			<username></username>
+			<password></password>
+			<database></database>
+		</database>
+		<emailRecipients>
+			<email>michael.pidde@gmail.com</email>
+		</emailRecipients>
+	</global>
+</config>

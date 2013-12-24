@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<apps>
+	<google>
+		<baseUrl>http://google.com/</baseUrl>
+		<suites>
+			<TestSuite>
+				<TestSuite />
+			</TestSuite>
+		</suites>
+		<allTests>
+			<SearchMamaJama />
+			<SearchNoResults />
+		</allTests>
+	</google>
+	<wordpress>
+		<BaseUrl></BaseUrl>
+		<AllTests></AllTests>
+	</wordpress>
+</apps>
