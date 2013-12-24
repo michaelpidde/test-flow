@@ -26,7 +26,6 @@ import com.michaelpidde.testflow.engine.util.Logger;
 import com.michaelpidde.testflow.engine.util.Emailer;
 import com.michaelpidde.testflow.engine.formatter.*;
 import com.michaelpidde.testflow.engine.xml.ConfigParser;
-import com.michaelpidde.testflow.client.frontend.Frontend;
 
 import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.args4j.CmdLineParser;
@@ -56,30 +55,27 @@ public class Cli {
 
     @Option(name="-l", handler=BooleanOptionHandler.class, usage="Log results to flat files.")
     private Boolean logResults = false;
-    
-    @Option(name="--frontend", handler=BooleanOptionHandler.class, usage="Run front end.")
-    private Boolean frontend = false;
 
 
     /*
      * Instance variables
      */
     Logger logger;
-    static ArrayList<String> emailRecipients;
+    ArrayList<String> emailRecipients;
     
 
     public static void main(String[] args) {
-    	/*
-    	 * Read in configuration.
-    	 */
-    	emailRecipients = ConfigParser.getEmailRecipients();
-    	
         new Cli().runSuite(args);
     }
 
 
 
     public ArrayList<ArrayList<TestResult>> runSuite(String[] args) {
+        /*
+         * Read in configuration.
+         */
+        emailRecipients = ConfigParser.getEmailRecipients();
+        
         CmdLineParser parser = new CmdLineParser(this);
         ArrayList<ArrayList<TestResult>> suiteResults = new ArrayList<ArrayList<TestResult>>();
         
@@ -90,29 +86,20 @@ public class Cli {
             return suiteResults;
         }
         
-        if(frontend) {
-        	try {
-        		new Frontend();
-        	} catch(Exception e) {
-        		System.out.println(e.toString());
-        	}
-        } else {
-        	// Set up logger
-            logger = new Logger(logResults);
-            
-        	// Process multiple baseURLs
-        	HashSet<String> urls = new HashSet<String>(Arrays.asList(baseUrl.split(",")));
-        	
-        	Iterator<String> urlIterator = urls.iterator();
-        	while(urlIterator.hasNext()) {
-        		TestSuite testSuite = new TestSuite(logger, browser, (String)urlIterator.next(), suite, logResults);
-            	testSuite.setup();
-            	testSuite.runTests(new HashSet<String>(Arrays.asList(tests.split(","))));
-            	testSuite.teardown();
-            	suiteResults.add(testSuite.getSuiteResults());
-        	}
-        }
+    	// Set up logger
+        logger = new Logger(logResults);
         
+    	// Process multiple baseURLs
+    	HashSet<String> urls = new HashSet<String>(Arrays.asList(baseUrl.split(",")));
+    	
+    	Iterator<String> urlIterator = urls.iterator();
+    	while(urlIterator.hasNext()) {
+    		TestSuite testSuite = new TestSuite(logger, browser, (String)urlIterator.next(), suite, logResults);
+        	testSuite.setup();
+        	testSuite.runTests(new HashSet<String>(Arrays.asList(tests.split(","))));
+        	testSuite.teardown();
+        	suiteResults.add(testSuite.getSuiteResults());
+    	}
         
         /*
          * Output formatters
@@ -126,7 +113,7 @@ public class Cli {
         // Console output
         FormatterText textFormatter = new FormatterText();
         System.out.println(textFormatter.formatSuite(suiteResults));
-        
+ 
         if(sendMail) {
         	FormatterEmail formatterEmail = new FormatterEmail();
         	String messageBody = formatterEmail.formatSuite(suiteResults);
