@@ -8,7 +8,7 @@ USAGE
 * Run Maven compile with assembly:single to grab all dependencies and move some static files to the right place.
 
 * Run with:
-java -cp [jar_name] com.michaelpidde.automated.TestCLI --frontend
+java -cp [jar_name] com.michaelpidde.testflow.Client
 
 
 DEPENDENCIES
