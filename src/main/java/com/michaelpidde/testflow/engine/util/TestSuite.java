@@ -87,40 +87,48 @@ public class TestSuite {
 
 
 	public void setup() {
-		if(browser.equals("ff")) {
-			driver = new FirefoxDriver();
-		} else if(browser.equals("ie")) {
-			try {
-				service = new InternetExplorerDriverService.Builder()
-					.usingDriverExecutable(new File(runPath + "\\IEDriverServer.exe"))
-					.usingAnyFreePort()
-					.build();
-				((InternetExplorerDriverService) service).start();
-				DesiredCapabilities ieOptions = DesiredCapabilities.internetExplorer();
-				ieOptions.setCapability("ignoreProtectedModeSettings", true);
-				driver = new RemoteWebDriver(((InternetExplorerDriverService) service).getUrl(), ieOptions);
-				driver = new Augmenter().augment(driver);
-			} catch(NullPointerException e) {
-				System.out.println(e.toString());
-			} catch (IOException e) {
-				System.out.println(e.toString());
-			}
-		} else if(browser.equals("chrome")) {
-			try {
-				service = new ChromeDriverService.Builder()
-					.usingDriverExecutable(new File(runPath + "\\chromedriver.exe"))
-					.usingAnyFreePort()
-					.build();
-				((ChromeDriverService) service).start();
-				DesiredCapabilities chromeOptions = DesiredCapabilities.chrome();
-				chromeOptions.setCapability("chrome.switches", Arrays.asList("--start-maximized"));
-				driver = new RemoteWebDriver(((ChromeDriverService) service).getUrl(), chromeOptions);
-				driver = new Augmenter().augment(driver);
-			} catch(NullPointerException e) {
-				System.out.println(e.toString());
-			} catch (IOException e) {
-				System.out.println(e.toString());
-			}
+		switch(browser) {
+
+			case "ff":
+				driver = new FirefoxDriver();
+			break;
+
+			case "ie":
+				try {
+					service = new InternetExplorerDriverService.Builder()
+						.usingDriverExecutable(new File(runPath + "\\IEDriverServer.exe"))
+						.usingAnyFreePort()
+						.build();
+					((InternetExplorerDriverService) service).start();
+					DesiredCapabilities ieOptions = DesiredCapabilities.internetExplorer();
+					ieOptions.setCapability("ignoreProtectedModeSettings", true);
+					driver = new RemoteWebDriver(((InternetExplorerDriverService) service).getUrl(), ieOptions);
+					driver = new Augmenter().augment(driver);
+				} catch(NullPointerException e) {
+					System.out.println(e.toString());
+				} catch (IOException e) {
+					System.out.println(e.toString());
+				}
+			break;
+
+			case "chrome":
+				try {
+					service = new ChromeDriverService.Builder()
+						.usingDriverExecutable(new File(runPath + "\\chromedriver.exe"))
+						.usingAnyFreePort()
+						.build();
+					((ChromeDriverService) service).start();
+					DesiredCapabilities chromeOptions = DesiredCapabilities.chrome();
+					chromeOptions.setCapability("chrome.switches", Arrays.asList("--start-maximized"));
+					driver = new RemoteWebDriver(((ChromeDriverService) service).getUrl(), chromeOptions);
+					driver = new Augmenter().augment(driver);
+				} catch(NullPointerException e) {
+					System.out.println(e.toString());
+				} catch (IOException e) {
+					System.out.println(e.toString());
+				}
+			break;
+			
 		}
 		
 		// Set a wait period for finding elements, max of 10 seconds.
@@ -204,12 +212,16 @@ public class TestSuite {
 	public void teardown() {
 		logger.dump();
 		
-		if(browser.equals("chrome")) {
-			((ChromeDriverService) service).stop();
-		} else if(browser.equals("ie")) {
-			((InternetExplorerDriverService) service).stop();
-		} else if(browser.equals("ff")) {
-			driver.quit();
+		switch(browser) {
+			case "chrome":
+				((ChromeDriverService) service).stop();
+			break;
+			case "ie":
+				((InternetExplorerDriverService) service).stop();
+			break;
+			case "ff":
+				driver.quit();
+			break;
 		}
 	}
 }

@@ -1,6 +1,7 @@
 <#include "Header.ftl">
 	<form name="testSuite" id="testSuite" method="POST" action="?action=run">
 		<input type="hidden" name="selectedTests" id="selectedTests" value="" />
+		<input type="hidden" name="app" id="app" value="${app}" />
 		
 		<fieldset><legend>Suites</legend>
 			<#list suites as suite>
