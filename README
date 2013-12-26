@@ -22,5 +22,4 @@ These are all handled by Maven if you choose to use it (why would you not?):
 * Jetty
 * Freemarker templating engine
 * JavaMail
-(Not currently used, but will be in the future:)
-* JDBC driver
+* MySQL JDBC driver
