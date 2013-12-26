@@ -40,31 +40,6 @@ create table if not exists suiteTestLink (
 );
 
 /*
- * Create stored procs
- */
-DELIMITER //
-create procedure getSuites(in package varchar(50))
-begin
-	select s.name from suites s
-	join packages p on p.id = s.packageId
-	where p.name = package;
-end//
-
-create procedure getTests(in package varchar(50))
-begin
-	select t.name from tests t
-	join packages p on p.id = t.packageId
-	where p.name = package;
-end//
-
-create procedure getBaseUrl(in package varchar(50))
-begin
-	select baseUrl from packages
-	where name = package;
-end//
-DELIMITER ;
-
-/*
  * Add some defaults
  */
 insert into packages values(1, 'google', 'http://google.com');

@@ -142,7 +142,12 @@ public class TestDAO {
 		params.add(app);
 
 		try {
-			result = query("{call getSuites(?)}", params);
+			result = query(
+				"select s.name from suites s " +
+				"join packages p on p.id = s.packageId " +
+				"where p.name = ?", 
+				params
+			);
 
 			while(result.next()) {
 				suites.add(result.getString("name"));
@@ -171,7 +176,12 @@ public class TestDAO {
 		params.add(app);
 
 		try {
-			result = query("{call getTests(?)}", params);
+			result = query(
+				"select t.name from tests t " +
+				"join packages p on p.id = t.packageId " +
+				"where p.name = ?", 
+				params
+			);
 
 			while(result.next()) {
 				tests.add(result.getString("name"));
@@ -200,7 +210,11 @@ public class TestDAO {
 		params.add(app);
 
 		try {
-			result = query("{call getBaseUrl(?)}", params);
+			result = query(
+				"select baseUrl from packages " +
+				"where name = ?", 
+				params
+			);
 
 			while(result.next()) {
 				baseUrl = result.getString("baseUrl");
