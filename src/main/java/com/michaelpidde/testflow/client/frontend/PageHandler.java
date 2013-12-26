@@ -88,49 +88,49 @@ public class PageHandler extends AbstractHandler {
 				}
 			break;
 
-			// case "ListSuites":
-			// 	ArrayList<String> suites = TestDAO.getSuites(selectedApp);
-			// 	ArrayList<String> tests = TestDAO.getTests(selectedApp);
-			// 	root.put("app", selectedApp);
-			// 	root.put("suites", suites); 
-			// 	root.put("tests", tests);
-			// 	template = config.getTemplate("ListSuites.ftl");
-			// 	try {
-			// 		template.process(root, writer);
-			// 	} catch(TemplateException e) {
-			// 		System.out.println(e.toString());
-			// 	}
-			// break;
+			case "ListSuites":
+				ArrayList<String> suites = TestDAO.getSuites(selectedApp);
+				ArrayList<String> tests = TestDAO.getTests(selectedApp);
+				root.put("app", selectedApp);
+				root.put("suites", suites); 
+				root.put("tests", tests);
+				template = config.getTemplate("ListSuites.ftl");
+				try {
+					template.process(root, writer);
+				} catch(TemplateException e) {
+					System.out.println(e.toString());
+				}
+			break;
 
-			// case "run":
-			// 	String runSuite = request.getParameter("suite");
-			// 	if(runSuite != null) {
-			// 		// TODO Implement suite logic.
-			// 	} else {
-			// 		String selectedTests = request.getParameter("selectedTests");
-			// 		String selectedBrowser = request.getParameter("browser");
-			// 		//String selectedEnvironment = request.getParameter("environment");
-			// 		Boolean logResults = checkboxToBoolean(request.getParameter("logResults"));
-			// 		//Boolean sendMail =  checkboxToBoolean(request.getParameter("sendMail"));
+			case "run":
+				String runSuite = request.getParameter("suite");
+				if(runSuite != null) {
+					// TODO Implement suite logic.
+				} else {
+					String selectedTests = request.getParameter("selectedTests");
+					String selectedBrowser = request.getParameter("browser");
+					//String selectedEnvironment = request.getParameter("environment");
+					Boolean logResults = checkboxToBoolean(request.getParameter("logResults"));
+					//Boolean sendMail =  checkboxToBoolean(request.getParameter("sendMail"));
 					
-			// 		Cli cli = new Cli();
+					Cli cli = new Cli();
 
-			// 		ArrayList<String> args = new ArrayList<String>(Arrays.asList("-e", "-s", selectedApp, "-b", selectedBrowser, "-u", 
-			// 			TestDAO.getBaseUrl(selectedApp), "-t", selectedTests));
-			// 		if(logResults) {
-			// 			args.add("-l");
-			// 		}
+					ArrayList<String> args = new ArrayList<String>(Arrays.asList("-e", "-s", selectedApp, "-b", selectedBrowser, "-u", 
+						TestDAO.getBaseUrl(selectedApp), "-t", selectedTests));
+					if(logResults) {
+						args.add("-l");
+					}
 					
-			// 		ArrayList<ArrayList<TestResult>> suiteResults = cli.runSuite(args.toArray(new String[args.size()]));
-			// 		for(ArrayList<TestResult> suite : suiteResults) {
-			// 			for(TestResult result : suite) {
-			// 				writer.println(result.write());
-			// 				writer.println("<br />");
-			// 			}
-			// 			writer.println("<hr />");
-			// 		}
-			// 	}
-			// break;
+					ArrayList<ArrayList<TestResult>> suiteResults = cli.runSuite(args.toArray(new String[args.size()]));
+					for(ArrayList<TestResult> suite : suiteResults) {
+						for(TestResult result : suite) {
+							writer.println(result.write());
+							writer.println("<br />");
+						}
+						writer.println("<hr />");
+					}
+				}
+			break;
 
 			case "exit":
 				System.exit(0);

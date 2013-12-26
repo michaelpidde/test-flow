@@ -26,10 +26,12 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.CallableStatement;
 import java.sql.ResultSet;
 
 public class TestDAO {
 	private static Connection connection = null;
+
 
 	public static void main(String[] args) {
 		try {
@@ -38,6 +40,7 @@ public class TestDAO {
 			System.out.println(e.toString());
 		}
 	}
+
 
 	public static Connection connect() {
 		try {
@@ -50,6 +53,7 @@ public class TestDAO {
 	}
 
 
+
 	public static void close() {
 		if(connection != null) {
 			try {
@@ -58,6 +62,7 @@ public class TestDAO {
 			connection = null;
 		}
 	}
+
 
 	public static ResultSet query(String sql) {
 		Statement statement = null;
@@ -72,9 +77,37 @@ public class TestDAO {
 		} catch(SQLException e) {
 			System.out.println(e.toString());
 		}
-		
+
 		return result;
 	}
+
+
+	public static ResultSet query(String sql, ArrayList args) {
+		ResultSet result = null;
+		CallableStatement statement;
+		boolean success;
+
+		try {
+			if(connection == null) {
+				connection = connect();
+			}
+			statement = connection.prepareCall(sql);
+			if(args.size() > 0) {
+				for(int i = 0; i <= args.size()-1; i++) {
+					statement.setString(i+1, args.get(i).toString());
+				}
+			}
+			success = statement.execute();
+			if(success) {
+				result = statement.getResultSet();
+			}
+		} catch(SQLException e) {
+			System.out.println(e.toString());
+		}
+
+		return result;
+	}
+
 
 	public static ArrayList<String> getApps() {
 		ArrayList<String> apps = new ArrayList<String>();
@@ -101,15 +134,90 @@ public class TestDAO {
 		return apps;
 	}
 
-	// public static ArrayList<String> getSuites(String app) {
 
-	// }
+	public static ArrayList<String> getSuites(String app) {
+		ArrayList<String> suites = new ArrayList<String>();
+		ResultSet result = null;
+		ArrayList<String> params = new ArrayList<String>();
+		params.add(app);
 
-	// public static ArrayList<String> getTests(String app) {
+		try {
+			result = query("{call getSuites(?)}", params);
 
-	// }
+			while(result.next()) {
+				suites.add(result.getString("name"));
+			}
+		} catch(SQLException e) {
+			System.out.println(e.toString());
+		} finally {
+			if(result != null) {
+				try {
+					result.close();
+				} catch(SQLException e) { }
+				result = null;
+			}
 
-	// public static String getBaseUrl(String app) {
+			close();
+		}
 
-	// }
+		return suites;
+	}
+
+
+	public static ArrayList<String> getTests(String app) {
+		ArrayList<String> tests = new ArrayList<String>();
+		ResultSet result = null;
+		ArrayList<String> params = new ArrayList<String>();
+		params.add(app);
+
+		try {
+			result = query("{call getTests(?)}", params);
+
+			while(result.next()) {
+				tests.add(result.getString("name"));
+			}
+		} catch(SQLException e) {
+			System.out.println(e.toString());
+		} finally {
+			if(result != null) {
+				try {
+					result.close();
+				} catch(SQLException e) { }
+				result = null;
+			}
+
+			close();
+		}
+
+		return tests;
+	}
+
+
+	public static String getBaseUrl(String app) {
+		String baseUrl = null;
+		ResultSet result = null;
+		ArrayList<String> params = new ArrayList<String>();
+		params.add(app);
+
+		try {
+			result = query("{call getBaseUrl(?)}", params);
+
+			while(result.next()) {
+				baseUrl = result.getString("baseUrl");
+			}
+		} catch(SQLException e) {
+			System.out.println(e.toString());
+		} finally {
+			if(result != null) {
+				try {
+					result.close();
+				} catch(SQLException e) { }
+				result = null;
+			}
+
+			close();
+		}
+
+		return baseUrl;
+	}
 }
