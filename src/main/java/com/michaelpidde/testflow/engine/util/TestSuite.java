@@ -1,7 +1,7 @@
 /*
  * TestFlow Selenium test suite setup and execution
  *
- * Copyright (C) 2013 Michael Pidde <michael.pidde@gmail.com>
+ * Copyright (C) 2014 Michael Pidde <michael.pidde@gmail.com>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
