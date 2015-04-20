@@ -11,10 +11,10 @@ public class Search {
 	@FindBy(how = How.ID, using = "resultStats")
 	private WebElement resultStats;
 
-	@FindBy(how = How.ID, using = "gbqfq")
+	@FindBy(how = How.ID, using = "lst-ib")
 	private WebElement searchBox;
 
-	@FindBy(how = How.ID, using = "gbqfb")
+	@FindBy(how = How.ID, using = "btnK")
 	private WebElement searchButton;
 
 	/*

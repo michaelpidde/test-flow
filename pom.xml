@@ -82,14 +82,16 @@
       <plugin>
         <artifactId>maven-assembly-plugin</artifactId>
         <configuration>
+          <finalName>test-flow</finalName>
           <archive>
             <manifest>
-              <mainClass>fully.qualified.MainClass</mainClass>
+              <mainClass>com.michaelpidde.testflow.Client</mainClass>
             </manifest>
           </archive>
           <descriptorRefs>
             <descriptorRef>jar-with-dependencies</descriptorRef>
           </descriptorRefs>
+          <appendAssemblyId>false</appendAssemblyId>
         </configuration>
       </plugin>
     </plugins>

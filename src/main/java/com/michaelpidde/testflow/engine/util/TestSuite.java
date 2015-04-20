@@ -114,7 +114,7 @@ public class TestSuite {
 			case "chrome":
 				try {
 					service = new ChromeDriverService.Builder()
-						.usingDriverExecutable(new File(runPath + "\\chromedriver.exe"))
+						.usingDriverExecutable(new File(runPath + "/chromedriver"))
 						.usingAnyFreePort()
 						.build();
 					((ChromeDriverService) service).start();
@@ -214,7 +214,7 @@ public class TestSuite {
 		
 		switch(browser) {
 			case "chrome":
-				((ChromeDriverService) service).stop();
+				driver.quit();
 			break;
 			case "ie":
 				((InternetExplorerDriverService) service).stop();
