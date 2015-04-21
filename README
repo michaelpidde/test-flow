@@ -3,12 +3,15 @@ This is a basic web GUI test automation framework utilizing Java and Selenium.
 
 USAGE
 ----------------------------------------------------------------
-* You must copy the browser executables from /exe to the same directory where your jar lives.
+* You must copy the browser executables from /drivers to the same directory where your jar lives.
 
 * Run Maven compile with assembly:single to grab all dependencies and move some static files to the right place.
 
 * Run with:
-java -cp [jar_name] com.michaelpidde.testflow.Client
+java -jar ./target/test-flow.jar
+
+* Or run CLI directly with:
+java -cp ./target/test-flow.jar com.michaelpidde.testflow.Cli -h
 
 
 DEPENDENCIES
