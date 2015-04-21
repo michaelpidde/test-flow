@@ -87,6 +87,14 @@ public class TestSuite {
 
 
 	public void setup() {
+		// Figure out system so we can load proper browser drivers.
+		String osFamily = "LIN";
+		String chromePath = "/chromedriver";
+		if(System.getProperty("os.name").contains("Windows")) {
+			osFamily = "WIN";
+			chromePath = ".\\chromedriver.exe";
+		}
+
 		switch(browser) {
 
 			case "ff":
@@ -96,7 +104,7 @@ public class TestSuite {
 			case "ie":
 				try {
 					service = new InternetExplorerDriverService.Builder()
-						.usingDriverExecutable(new File(runPath + "\\IEDriverServer.exe"))
+						.usingDriverExecutable(new File(runPath + ".\\IEDriverServer.exe"))
 						.usingAnyFreePort()
 						.build();
 					((InternetExplorerDriverService) service).start();
@@ -114,7 +122,7 @@ public class TestSuite {
 			case "chrome":
 				try {
 					service = new ChromeDriverService.Builder()
-						.usingDriverExecutable(new File(runPath + "/chromedriver"))
+						.usingDriverExecutable(new File(runPath + chromePath))
 						.usingAnyFreePort()
 						.build();
 					((ChromeDriverService) service).start();
@@ -139,26 +147,6 @@ public class TestSuite {
 
 		// Start test suite run.
 		driver.get(baseUrl);
-		
-
-		/*
-		 * This is not used currently. It's a step retained from legacy code, but I want
-		 * to leave it for now due to its potentially useful nature. A better way to do
-		 * this would be to change it to a test of the baseUrl and checking by response
-		 * (i.e. 404, 500, 501, etc.).
-		 */
-		// Do a quick smoke test to see if the URL has any errors on it.
-		// CFError cferror = new CFError(driver, baseUrl, logger);
-		// boolean error = false;
-		// try {
-		// 	error = cferror.run();
-		// } catch(TestException e) {
-		// 	// Don't do anything with this error at this time.
-		// }
-		
-		// if(error) {
-		//	runSuite = false;
-		// }
 	}
 
 
@@ -211,17 +199,6 @@ public class TestSuite {
 
 	public void teardown() {
 		logger.dump();
-		
-		switch(browser) {
-			case "chrome":
-				driver.quit();
-			break;
-			case "ie":
-				((InternetExplorerDriverService) service).stop();
-			break;
-			case "ff":
-				driver.quit();
-			break;
-		}
+		driver.quit();
 	}
 }

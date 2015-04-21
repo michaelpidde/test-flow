@@ -66,7 +66,7 @@ public class FormatterFileSystem implements IResultFormatter {
 	public String formatResult(TestResult result) {
 		// Set up data for template
 		Map<String, Object> root = new HashMap<String, Object>();
-		root.put("title", "Wolfnet Regression Testing Results: " + result.testName);
+		root.put("title", "UI Testing Results: " + result.testName);
 		root.put("steps", result.steps);
 		root.put("error", result.error);
 		Template template;
@@ -95,7 +95,7 @@ public class FormatterFileSystem implements IResultFormatter {
 	public String formatSuite(ArrayList<ArrayList<TestResult>> suite) {
 		// Set up data for template
 		Map<String, Serializable> root = new HashMap<String, Serializable>();
-		root.put("title", "Wolfnet Regression Testing Results");
+		root.put("title", "UI Testing Results");
 		root.put("logLocation", logLocation.toString());
 		Template template;
 		

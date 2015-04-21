@@ -30,6 +30,7 @@ import com.michaelpidde.testflow.engine.xml.ConfigParser;
 import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.args4j.CmdLineParser;
 import org.kohsuke.args4j.Option;
+import org.kohsuke.args4j.OptionHandlerFilter;
 import org.kohsuke.args4j.spi.BooleanOptionHandler;
 
 import java.util.*;
@@ -55,6 +56,9 @@ public class Cli {
 
     @Option(name="-l", handler=BooleanOptionHandler.class, usage="Log results to flat files.")
     private Boolean logResults = false;
+
+    @Option(name="-h", usage="Show help.", forbids={"-b", "-t", "-s", "-u", "-e", "-l"})
+    private Boolean showHelp = false;
 
 
     /*
@@ -84,6 +88,12 @@ public class Cli {
         } catch(CmdLineException e) {
             System.out.println(e.getMessage());
             return suiteResults;
+        }
+
+        if(showHelp) {
+            System.out.println(System.getProperty("os.name"));
+            parser.printUsage(System.out);
+            System.exit(0);
         }
         
     	// Set up logger
