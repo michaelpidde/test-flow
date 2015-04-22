@@ -91,7 +91,6 @@ public class Cli {
         }
 
         if(showHelp) {
-            System.out.println(System.getProperty("os.name"));
             parser.printUsage(System.out);
             System.exit(0);
         }

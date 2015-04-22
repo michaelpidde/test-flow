@@ -12,6 +12,14 @@
 			<SearchNoResults />
 		</allTests>
 	</google>
+	<wolfnet>
+		<baseUrl>http://search.hometoaustx.com/</baseUrl>
+		<suites></suites>
+		<allTests>
+			<TestLoginModal />
+			<TestSingleFamilySearch />
+		</allTests>
+	</wolfnet>
 	<wordpress>
 		<BaseUrl></BaseUrl>
 		<AllTests></AllTests>
