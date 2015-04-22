@@ -24,7 +24,10 @@ import com.michaelpidde.testflow.engine.util.Logger;
 import com.michaelpidde.testflow.engine.util.TestStep;
 
 import java.util.ArrayList;
+import java.lang.Thread;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.By;
 
 public abstract class Test {
 	protected WebDriver driver;
@@ -35,7 +38,6 @@ public abstract class Test {
 	private ArrayList<TestStep> steps = new ArrayList<TestStep>();
 
 
-
 	public Test(WebDriver driver, String baseUrl, Logger logger) {
 		this.driver = driver;
 		this.baseUrl = baseUrl;
@@ -43,17 +45,30 @@ public abstract class Test {
 	}
 
 
-
 	public ArrayList<TestStep> getSteps() {
 		return steps;
 	}
-
 
 
 	public void logStep(String description) {
 		steps.add(new TestStep(description, scrnCap()));
 	}
 
+
+	public WebElement findElementByClass(String name) {
+		WebElement element = driver.findElement(By.className(name));
+		return element;
+	}
+
+
+	public void wait(int seconds) {
+		try {
+			// Wait for login redirect.
+			Thread.sleep(seconds * 1000);
+		} catch(InterruptedException ex) {
+			Thread.currentThread().interrupt();
+		}
+	}
 
 
 	protected String scrnCap() {
@@ -67,7 +82,6 @@ public abstract class Test {
 		screenIndex++;
 		return screenPath;
 	}
-
 
 
 	protected void log(String message) {
