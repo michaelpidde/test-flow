@@ -26,6 +26,8 @@ import com.michaelpidde.testflow.engine.util.TestStep;
 import com.michaelpidde.testflow.engine.util.TestResult;
 import com.michaelpidde.testflow.engine.util.TestException;
 
+import com.michaelpidde.testflow.engine.util.Z;
+
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.io.File;
@@ -156,37 +158,39 @@ public class TestSuite {
 			// Only do this if there are no pre-test errors on the page.
 			for(String test : tests) {
 				TestResult result = new TestResult();
+
+				Z z = new Z(driver, baseUrl, logger);
 	
-				try {
-					Class<?> myClass = Class.forName("com.michaelpidde.testflow.client.tests." + suite + "." + test);
-					Object testObject = myClass.getConstructor(WebDriver.class, String.class, Logger.class).newInstance(driver, baseUrl, logger);
-					Method run = testObject.getClass().getMethod("run");
-					Method getSteps = testObject.getClass().getMethod("getSteps");
-					result.testName = testObject.getClass().getSimpleName();
-					result.passed = (Boolean)run.invoke(testObject);
-					result.steps = (ArrayList<TestStep>)getSteps.invoke(testObject);
-				} catch(ClassNotFoundException e) {
-					result.passed = false;
-					result.testName = test;
-					result.error = e.toString();
-				} catch(NoSuchMethodException e) {
-					System.out.println(e.toString());
-				} catch(IllegalAccessException e) {
-					System.out.println(e.toString());
-				} catch(InstantiationException e) {
-					System.out.println(e.toString());
-				} catch(InvocationTargetException e) {
-					// This exception occurs when one of the methods invoked via reflection returns an error. We rethrow the error
-					// and re-catch the "inner" real exception.
-					try {
-						throw e.getCause();
-					} catch(TestException inner) {
-						result.passed = false;
-						result.error = inner.toString();
-					} catch(Throwable inner) {
-						System.out.println(inner.toString());
-					}
-				}
+				// try {
+				// 	Class<?> myClass = Class.forName("com.michaelpidde.testflow.client.tests." + suite + "." + test);
+				// 	Object testObject = myClass.getConstructor(WebDriver.class, String.class, Logger.class).newInstance(driver, baseUrl, logger);
+				// 	Method run = testObject.getClass().getMethod("run");
+				// 	Method getSteps = testObject.getClass().getMethod("getSteps");
+				// 	result.testName = testObject.getClass().getSimpleName();
+				// 	result.passed = (Boolean)run.invoke(testObject);
+				// 	result.steps = (ArrayList<TestStep>)getSteps.invoke(testObject);
+				// } catch(ClassNotFoundException e) {
+				// 	result.passed = false;
+				// 	result.testName = test;
+				// 	result.error = e.toString();
+				// } catch(NoSuchMethodException e) {
+				// 	System.out.println(e.toString());
+				// } catch(IllegalAccessException e) {
+				// 	System.out.println(e.toString());
+				// } catch(InstantiationException e) {
+				// 	System.out.println(e.toString());
+				// } catch(InvocationTargetException e) {
+				// 	// This exception occurs when one of the methods invoked via reflection returns an error. We rethrow the error
+				// 	// and re-catch the "inner" real exception.
+				// 	try {
+				// 		throw e.getCause();
+				// 	} catch(TestException inner) {
+				// 		result.passed = false;
+				// 		result.error = inner.toString();
+				// 	} catch(Throwable inner) {
+				// 		System.out.println(inner.toString());
+				// 	}
+				// }
 	
 				result.setRunEnd();
 				results.add(result);
