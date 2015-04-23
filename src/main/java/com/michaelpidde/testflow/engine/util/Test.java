@@ -29,7 +29,9 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.By;
 
-public abstract class Test {
+import groovy.lang.Script;
+
+public abstract class Test extends Script {
 	protected WebDriver driver;
 	protected String baseUrl;
 	protected Logger logger;
@@ -38,7 +40,7 @@ public abstract class Test {
 	private ArrayList<TestStep> steps = new ArrayList<TestStep>();
 
 
-	public Test(WebDriver driver, String baseUrl, Logger logger) {
+	public void setup(WebDriver driver, String baseUrl, Logger logger) {
 		this.driver = driver;
 		this.baseUrl = baseUrl;
 		this.logger = logger;

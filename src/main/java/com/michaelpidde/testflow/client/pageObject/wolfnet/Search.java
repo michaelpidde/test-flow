@@ -32,6 +32,13 @@ public class Search {
 	@FindBy(how = How.XPATH, using = "//span[@class='result-count-label']/preceding-sibling::span")
 	public WebElement resultCount;
 
+	private WebDriver driver;
+
+
+	public void setDriver(WebDriver driver) {
+		this.driver = driver;
+	}
+
 
 	public void login() {
 		loginLink.click();
@@ -41,15 +48,15 @@ public class Search {
 	}
 
 
-	public WebElement openSearchOptionMenu(String menuLabel) {
+	public void openSearchOptionMenu(String menuLabel) {
 		WebElement menu = searchOptionsBar.findElement(
 			By.xpath("//fieldset/legend/span[contains(text(),'" + menuLabel + "')]")
 		);
-		return menu;
+		menu.click();
 	}
 
 
-	public void selectPropertyType(WebDriver driver, String label) {
+	public void selectPropertyType(String label) {
 		WebElement checkbox = driver.findElement(
 			By.xpath("//label[contains(., '" + label + "')]/input")
 		);

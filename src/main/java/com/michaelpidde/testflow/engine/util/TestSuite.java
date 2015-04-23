@@ -159,7 +159,10 @@ public class TestSuite {
 			for(String test : tests) {
 				TestResult result = new TestResult();
 
-				Z z = new Z(driver, baseUrl, logger);
+				Z z = new Z();
+				result.testName = "TestSingleFamily";
+				result.passed = z.run(driver, baseUrl, logger);
+				result.steps = z.getSteps();
 	
 				// try {
 				// 	Class<?> myClass = Class.forName("com.michaelpidde.testflow.client.tests." + suite + "." + test);
