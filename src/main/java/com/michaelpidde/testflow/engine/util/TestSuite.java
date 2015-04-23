@@ -25,8 +25,7 @@ import com.michaelpidde.testflow.engine.util.Logger;
 import com.michaelpidde.testflow.engine.util.TestStep;
 import com.michaelpidde.testflow.engine.util.TestResult;
 import com.michaelpidde.testflow.engine.util.TestException;
-
-import com.michaelpidde.testflow.engine.util.Z;
+import com.michaelpidde.testflow.engine.util.TestCompiler;
 
 import java.util.*;
 import java.util.concurrent.TimeUnit;
@@ -145,56 +144,17 @@ public class TestSuite {
 
 		// Set up logger
 		logger.setDriver(driver);
-
-		// Start test suite run.
-		driver.get(baseUrl);
 	}
 
 
-	
-	@SuppressWarnings("unchecked")
 	public void runTests(HashSet<String> tests) {
 		if(runSuite) {
 			// Only do this if there are no pre-test errors on the page.
 			for(String test : tests) {
-				TestResult result = new TestResult();
-
-				Z z = new Z();
-				result.testName = "TestSingleFamily";
-				result.passed = z.run(driver, baseUrl, logger);
-				result.steps = z.getSteps();
-	
-				// try {
-				// 	Class<?> myClass = Class.forName("com.michaelpidde.testflow.client.tests." + suite + "." + test);
-				// 	Object testObject = myClass.getConstructor(WebDriver.class, String.class, Logger.class).newInstance(driver, baseUrl, logger);
-				// 	Method run = testObject.getClass().getMethod("run");
-				// 	Method getSteps = testObject.getClass().getMethod("getSteps");
-				// 	result.testName = testObject.getClass().getSimpleName();
-				// 	result.passed = (Boolean)run.invoke(testObject);
-				// 	result.steps = (ArrayList<TestStep>)getSteps.invoke(testObject);
-				// } catch(ClassNotFoundException e) {
-				// 	result.passed = false;
-				// 	result.testName = test;
-				// 	result.error = e.toString();
-				// } catch(NoSuchMethodException e) {
-				// 	System.out.println(e.toString());
-				// } catch(IllegalAccessException e) {
-				// 	System.out.println(e.toString());
-				// } catch(InstantiationException e) {
-				// 	System.out.println(e.toString());
-				// } catch(InvocationTargetException e) {
-				// 	// This exception occurs when one of the methods invoked via reflection returns an error. We rethrow the error
-				// 	// and re-catch the "inner" real exception.
-				// 	try {
-				// 		throw e.getCause();
-				// 	} catch(TestException inner) {
-				// 		result.passed = false;
-				// 		result.error = inner.toString();
-				// 	} catch(Throwable inner) {
-				// 		System.out.println(inner.toString());
-				// 	}
-				// }
-	
+				TestCompiler compiler = new TestCompiler();
+				String testName = suite + "/" + test;
+				TestResult result = compiler.run(driver, baseUrl, logger, testName);
+				result.steps = compiler.getSteps();
 				result.setRunEnd();
 				results.add(result);
 			}
@@ -205,6 +165,16 @@ public class TestSuite {
 
 	public void teardown() {
 		logger.dump();
-		driver.quit();
+		switch(browser) {
+			case "chrome":
+				((ChromeDriverService) service).stop();
+			break;
+			case "ie":
+				((InternetExplorerDriverService) service).stop();
+			break;
+			case "ff":
+				driver.quit();
+			break;
+		}
 	}
 }

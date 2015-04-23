@@ -16,6 +16,7 @@
 		<baseUrl>http://search.hometoaustx.com/</baseUrl>
 		<suites></suites>
 		<allTests>
+			<ImplicitFail />
 			<TestLoginModal />
 			<TestSingleFamilySearch />
 		</allTests>
