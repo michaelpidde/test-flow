@@ -74,7 +74,11 @@ public class FormatterFileSystem implements IResultFormatter {
 		Template template;
 		
 		FileWriter writer;
-		String filename = logLocation.toString() + "/" + result.testName + new UID().toString().replace(":", "") + ".htm";
+		String filename = logLocation.toString() 
+			+ "/" 
+			+ result.testName.replace("/", "-") 
+			+ new UID().toString().replace(":", "") + ".htm";
+		
 		try {
 			writer = new FileWriter(filename);
 			template = config.getTemplate("TestResult.ftl");
