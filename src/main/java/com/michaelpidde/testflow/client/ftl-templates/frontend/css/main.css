@@ -15,3 +15,7 @@ html, body, div, span, p {
 	padding: 6px;
 	background: #CEC9C4;
 }
+
+table td {
+	padding: 4px;
+}

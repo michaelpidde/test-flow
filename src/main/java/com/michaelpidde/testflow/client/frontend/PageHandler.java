@@ -124,12 +124,22 @@ public class PageHandler extends AbstractHandler {
 					}
 					
 					ArrayList<ArrayList<TestResult>> suiteResults = cli.runSuite(args.toArray(new String[args.size()]));
+					// TODO Replace this with an HTML formatter.
+					String body = "";
 					for(ArrayList<TestResult> suite : suiteResults) {
+						body += "<b>Suite Results:</b><br />";
 						for(TestResult result : suite) {
-							writer.println(result.write());
-							writer.println("<br />");
+							body += result.write().replaceAll("(\r\n|\n)", "<br />");
+							body += "<hr />";
 						}
-						writer.println("<hr />");
+						body += "<hr />";
+					}
+					root.put("body", body);
+					template = config.getTemplate("ListResults.ftl");
+					try {
+						template.process(root, writer);
+					} catch(TemplateException e) {
+						System.out.println(e.toString());
 					}
 				}
 			break;

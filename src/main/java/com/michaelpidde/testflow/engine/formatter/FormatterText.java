@@ -56,6 +56,7 @@ public class FormatterText implements IResultFormatter {
 		for(ArrayList<TestResult> run : suite) {
 			
 			for(TestResult result : run) {
+				output += "\n---------------------------------------------------------------\n";
 				output += formatResult(result) + "\n";
 			}
 			

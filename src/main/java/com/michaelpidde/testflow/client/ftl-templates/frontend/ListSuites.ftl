@@ -27,14 +27,17 @@
 			<br />
 			<table cellpadding="1" cellspacing="0" border="1">
 				<tr>
-					<th colspan="2">
+					<th>
 						<p style="font-weight: bold;">Options</p>
 					</th>
 				</tr>
 				<tr>
-					<td colspan="2">
+					<td>
 						<table cellpadding="1" cellspacing="0" border="0">
 							<tr>
+								<td>
+									Browser:
+								</td>
 								<td>
 									<input type="radio" name="browser" value="ff" checked="checked" /> FF
 								</td>
@@ -50,9 +53,7 @@
 				</tr>
 				<tr>
 					<td>
-						<label for="logResults">Log Results</label>
-					</td>
-					<td>
+						<label for="logResults">Log Results: </label>
 						<input type="checkbox" name="logResults" id="logResults" checked="checked" />
 					</td>
 				</tr>

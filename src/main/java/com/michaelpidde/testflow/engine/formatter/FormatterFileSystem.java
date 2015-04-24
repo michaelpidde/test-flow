@@ -44,12 +44,10 @@ public class FormatterFileSystem implements IResultFormatter {
 	private Configuration config;
 	
 	
-	
 	public void setLogLocation(Path logLocation) {
 		this.logLocation = logLocation;
 		this.config = setConfig();
 	}
-	
 	
 	
 	private Configuration setConfig() {
@@ -61,7 +59,6 @@ public class FormatterFileSystem implements IResultFormatter {
 		config.setTemplateExceptionHandler(TemplateExceptionHandler.HTML_DEBUG_HANDLER);
 		return config;
 	}
-	
 	
 	
 	@Override
@@ -94,7 +91,6 @@ public class FormatterFileSystem implements IResultFormatter {
 		
 		return filename;
 	}
-
 	
 	
 	@Override
