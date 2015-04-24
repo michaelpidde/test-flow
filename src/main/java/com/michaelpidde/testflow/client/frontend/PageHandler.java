@@ -72,11 +72,12 @@ public class PageHandler extends AbstractHandler {
 		Map<String, Serializable> root = new HashMap<String, Serializable>();
 		root.put("title", "TestFlow");
 		Template template;
+		TestDAO testDao = new TestDAO("./tests/Tests.xml");
 		
 		switch(action) {
 
 			case "ListApps":
-				ArrayList<String> apps = TestDAO.getApps();
+				ArrayList<String> apps = testDao.getApps();
 				root.put("apps", apps);
 				
 				template = config.getTemplate("ListApps.ftl");
@@ -88,8 +89,8 @@ public class PageHandler extends AbstractHandler {
 			break;
 
 			case "ListSuites":
-				ArrayList<String> suites = TestDAO.getSuites(selectedApp);
-				ArrayList<String> tests = TestDAO.getTests(selectedApp);
+				ArrayList<String> suites = testDao.getSuites(selectedApp);
+				ArrayList<String> tests = testDao.getTests(selectedApp);
 				root.put("app", selectedApp);
 				root.put("suites", suites); 
 				root.put("tests", tests);
@@ -115,7 +116,7 @@ public class PageHandler extends AbstractHandler {
 					Cli cli = new Cli();
 
 					ArrayList<String> args = new ArrayList<String>(Arrays.asList("-e", "-s", selectedApp, "-b", selectedBrowser, "-u", 
-						TestDAO.getBaseUrl(selectedApp), "-t", selectedTests));
+						testDao.getBaseUrl(selectedApp), "-t", selectedTests));
 					if(logResults) {
 						args.add("-l");
 					}

@@ -75,11 +75,6 @@ public class Cli {
 
 
     public ArrayList<ArrayList<TestResult>> runSuite(String[] args) {
-        /*
-         * Read in configuration.
-         */
-        emailRecipients = ConfigParser.getEmailRecipients();
-        
         CmdLineParser parser = new CmdLineParser(this);
         ArrayList<ArrayList<TestResult>> suiteResults = new ArrayList<ArrayList<TestResult>>();
         
@@ -89,6 +84,12 @@ public class Cli {
             System.out.println(e.getMessage());
             return suiteResults;
         }
+
+        /*
+         * Read in configuration.
+         */
+        ConfigParser config = new ConfigParser("./tests/" + suite + "/Config.xml");
+        emailRecipients = config.getEmailRecipients();
 
         if(showHelp) {
             parser.printUsage(System.out);

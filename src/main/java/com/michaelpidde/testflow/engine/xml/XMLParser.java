@@ -20,6 +20,7 @@
 
 package com.michaelpidde.testflow.engine.xml;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -35,7 +36,12 @@ import org.xml.sax.*;
 import org.w3c.dom.*;
 
 public class XMLParser {
-	public static ArrayList<String> getNodeNamesAsList(URL xmlFile, String path) {
+	public static File loadConfig(String path) {
+		return new File(path);
+	}
+
+
+	public static ArrayList<String> getNodeNamesAsList(File xmlFile, String path) {
 		ArrayList<String> collection = new ArrayList<String>();
 		NodeList nodes = getNodeList(xmlFile, path);
 		
@@ -47,8 +53,7 @@ public class XMLParser {
 	}
 	
 	
-	
-	public static ArrayList<String> getNodeValuesAsList(URL xmlFile, String path) {
+	public static ArrayList<String> getNodeValuesAsList(File xmlFile, String path) {
 		ArrayList<String> collection = new ArrayList<String>();
 		NodeList nodes = getNodeList(xmlFile, path);
 		
@@ -60,8 +65,7 @@ public class XMLParser {
 	}
 	
 	
-	
-	public static NodeList getNodeList(URL xmlFile, String path) {
+	public static NodeList getNodeList(File xmlFile, String path) {
 		Document xml;
 		NodeList nodes = null;
 		DocumentBuilderFactory builder = DocumentBuilderFactory.newInstance();
@@ -88,8 +92,7 @@ public class XMLParser {
 	}
 
 
-
-	public static String getNodeValueAsString(URL xmlFile, String path) {
+	public static String getNodeValueAsString(File xmlFile, String path) {
 		String nodeValue = "";
 		NodeList nodes = getNodeList(xmlFile, path);
 

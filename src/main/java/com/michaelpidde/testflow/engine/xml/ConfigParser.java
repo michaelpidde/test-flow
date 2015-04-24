@@ -20,16 +20,20 @@
 
 package com.michaelpidde.testflow.engine.xml;
 
-import java.net.URL;
+import java.io.File;
 import java.util.ArrayList;
 
 import com.michaelpidde.testflow.engine.xml.TestDAO;
 import com.michaelpidde.testflow.engine.xml.XMLParser;
 
 public class ConfigParser extends XMLParser {
-	private static URL configXml = TestDAO.class.getClass().getResource("/Config.xml");
+	private File configXml;
+
+	public ConfigParser(String path) {
+		this.configXml = loadConfig(path);
+	}
 	
-	public static ArrayList<String> getEmailRecipients() {
+	public ArrayList<String> getEmailRecipients() {
 		return getNodeValuesAsList(configXml, "/config/global/emailRecipients/*");
 	}
 }

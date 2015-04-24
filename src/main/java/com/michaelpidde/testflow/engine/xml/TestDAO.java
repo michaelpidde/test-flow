@@ -20,35 +20,31 @@
 
 package com.michaelpidde.testflow.engine.xml;
 
-import java.net.URL;
+import java.io.File;
 import java.util.ArrayList;
 
 import com.michaelpidde.testflow.engine.xml.XMLParser;
 
 public class TestDAO extends XMLParser {
-	private static URL testXml = TestDAO.class.getClass().getResource("/Tests.xml");
+	private File testXml;
 	
-	
-	
-	public static ArrayList<String> getApps() {
+	public TestDAO(String path) {
+		this.testXml = loadConfig(path);
+	}
+
+	public ArrayList<String> getApps() {
 		return getNodeNamesAsList(testXml, "/apps/*");
 	}
 	
-	
-	
-	public static ArrayList<String> getSuites(String app) {
+	public ArrayList<String> getSuites(String app) {
 		return getNodeNamesAsList(testXml, "/apps/" + app + "/suites/*");
 	}
 	
-	
-	
-	public static ArrayList<String> getTests(String app) {
+	public ArrayList<String> getTests(String app) {
 		return getNodeNamesAsList(testXml, "/apps/" + app + "/allTests/*");
 	}
 
-
-
-	public static String getBaseUrl(String app) {
+	public String getBaseUrl(String app) {
 		return getNodeValueAsString(testXml, "/apps/" + app + "/*");
 	}
 }

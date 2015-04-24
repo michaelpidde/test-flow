@@ -12,7 +12,7 @@
 			<SearchNoResults />
 		</allTests>
 	</google>
-	<wolfnet>
+	<obsidian>
 		<baseUrl>http://search.hometoaustx.com/</baseUrl>
 		<suites></suites>
 		<allTests>
@@ -20,7 +20,7 @@
 			<TestLoginModal />
 			<TestSingleFamilySearch />
 		</allTests>
-	</wolfnet>
+	</obsidian>
 	<wordpress>
 		<BaseUrl></BaseUrl>
 		<AllTests></AllTests>
