@@ -87,16 +87,16 @@ public class Cli {
             return suiteResults;
         }
 
+        if(showHelp) {
+            parser.printUsage(System.out);
+            System.exit(0);
+        }
+
         /*
          * Read in configuration.
          */
         ConfigParser config = new ConfigParser("./tests/" + suite + "/Config.xml");
         emailRecipients = config.getEmailRecipients();
-
-        if(showHelp) {
-            parser.printUsage(System.out);
-            System.exit(0);
-        }
         
     	// Set up logger
         logger = new Logger(logResults);

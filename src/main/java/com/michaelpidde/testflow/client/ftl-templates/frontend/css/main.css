@@ -19,3 +19,9 @@ html, body, div, span, p {
 table td {
 	padding: 4px;
 }
+
+.error {
+	padding: 10px;
+	border: 1px solid #692626;
+	background: #E8B3B3;
+}

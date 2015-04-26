@@ -25,6 +25,7 @@ package com.michaelpidde.testflow.client.frontend;
 import com.michaelpidde.testflow.Cli;
 import com.michaelpidde.testflow.engine.xml.TestDAO;
 import com.michaelpidde.testflow.engine.util.TestResult;
+import com.michaelpidde.testflow.engine.formatter.FormatterHTML;
 
 import freemarker.template.Configuration;
 import freemarker.template.DefaultObjectWrapper;
@@ -124,16 +125,8 @@ public class PageHandler extends AbstractHandler {
 					}
 					
 					ArrayList<ArrayList<TestResult>> suiteResults = cli.runSuite(args.toArray(new String[args.size()]));
-					// TODO Replace this with an HTML formatter.
-					String body = "";
-					for(ArrayList<TestResult> suite : suiteResults) {
-						body += "<b>Suite Results:</b><br />";
-						for(TestResult result : suite) {
-							body += result.write().replaceAll("(\r\n|\n)", "<br />");
-							body += "<hr />";
-						}
-						body += "<hr />";
-					}
+					FormatterHTML formatter = new FormatterHTML();
+					String body = formatter.formatSuite(suiteResults);
 					root.put("body", body);
 					template = config.getTemplate("ListResults.ftl");
 					try {
