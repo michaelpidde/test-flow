@@ -36,6 +36,8 @@ import freemarker.template.TemplateExceptionHandler;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Serializable;
+import java.io.File;
+import java.io.FilenameFilter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -80,7 +82,8 @@ public class PageHandler extends AbstractHandler {
 		switch(action) {
 
 			case "ListApps":
-				ArrayList<String> apps = testDao.getApps();
+				File directory = new File("./tests");
+				ArrayList<String> apps = listDirectories(directory);
 				root.put("apps", apps);
 				
 				template = config.getTemplate("ListApps.ftl");
@@ -93,7 +96,8 @@ public class PageHandler extends AbstractHandler {
 
 			case "ListSuites":
 				ArrayList<String> suites = testDao.getSuites(selectedApp);
-				ArrayList<String> tests = testDao.getTests(selectedApp);
+				File testDirectory = new File("./tests/" + selectedApp);
+				ArrayList<String> tests = listDirectoryFiles(testDirectory);
 				root.put("app", selectedApp);
 				root.put("suites", suites); 
 				root.put("tests", tests);
@@ -145,9 +149,40 @@ public class PageHandler extends AbstractHandler {
 	}
 	
 	
-	
 	private Boolean checkboxToBoolean(String value) {
 		return (value == null) ? false : true;
+	}
+
+
+	private ArrayList<String> listDirectoryFiles(File directory) {
+		ArrayList<String> files = new ArrayList<String>();
+		FilenameFilter filter = new FilenameFilter() {
+			public boolean accept(File directory, String name) {
+				return name.endsWith(".groovy");
+			}
+		};
+		for(File file : directory.listFiles(filter)) {
+			if(!file.isDirectory()) {
+				files.add(file.getName().replace(".groovy", ""));
+			}
+		}
+		return files;
+	}
+
+
+	private ArrayList<String> listDirectories(File directory) {
+		ArrayList<String> directories = new ArrayList<String>();
+		FilenameFilter filter = new FilenameFilter() {
+			public boolean accept(File directory, String name) {
+				return !name.endsWith(".git");
+			}
+		};
+		for (File file : directory.listFiles(filter)) {
+			if(file.isDirectory()) {
+				directories.add(file.getName());
+			}
+		}
+		return directories;
 	}
 	
 }
