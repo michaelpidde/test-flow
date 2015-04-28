@@ -5,7 +5,8 @@ USAGE
 ----------------------------------------------------------------
 * You must copy the browser executables from /drivers to the same directory where your jar lives.
 
-* Run Maven compile with assembly:single to grab all dependencies and move some static files to the right place.
+* Run Maven compile with assembly:single to grab all dependencies and move some static files to the right place:
+mvn compile assembly:single
 
 * Run with:
 java -jar ./target/test-flow.jar
