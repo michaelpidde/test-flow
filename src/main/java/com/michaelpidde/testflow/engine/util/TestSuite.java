@@ -24,6 +24,7 @@ package com.michaelpidde.testflow.engine.util;
 
 import com.michaelpidde.testflow.Cli;
 import com.michaelpidde.testflow.engine.util.Logger;
+import com.michaelpidde.testflow.engine.util.Test;
 import com.michaelpidde.testflow.engine.util.TestStep;
 import com.michaelpidde.testflow.engine.util.TestResult;
 import com.michaelpidde.testflow.engine.util.TestException;
@@ -35,6 +36,7 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.lang.reflect.InvocationTargetException;
+import java.net.MalformedURLException;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
@@ -44,6 +46,9 @@ import org.openqa.selenium.remote.Augmenter;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.remote.service.DriverService;
+
+import groovy.lang.GroovyClassLoader;
+import org.codehaus.groovy.control.CompilerConfiguration;
 
 public class TestSuite {
 	protected WebDriver driver;
@@ -56,7 +61,7 @@ public class TestSuite {
 	protected ArrayList<TestResult> results = new ArrayList<TestResult>();
 	protected String runPath = "";
 	protected DriverService service;
-
+	protected GroovyClassLoader loader;
 
 
 	public TestSuite(Logger logger, String browser, String baseUrl, String suite, Boolean logScreens) {
@@ -78,14 +83,18 @@ public class TestSuite {
 			path += "/" + part;
 		}
 		this.runPath = path;
+
+		// Set up class loader for Groovy compiling
+		CompilerConfiguration configuration = new CompilerConfiguration();
+		configuration.setScriptBaseClass("com.michaelpidde.testflow.engine.util.Test");
+		ClassLoader parent = TestCompiler.class.getClassLoader();
+		this.loader = new GroovyClassLoader(parent, configuration);
 	}
-	
 	
 	
 	public ArrayList<TestResult> getSuiteResults() {
 		return results;
 	}
-
 
 
 	public void setup() {
@@ -150,10 +159,15 @@ public class TestSuite {
 
 
 	public void runTests(HashSet<String> tests) {
+		// Only do this if there are no pre-test errors on the page.
 		if(runSuite) {
-			// Only do this if there are no pre-test errors on the page.
+			// Compile page object(s).
+			File pageDirectory = new File("./tests/" + suite + "/pageObject");
+			PageObjectCompiler pageCompiler = new PageObjectCompiler(loader, pageDirectory);
+
+			// Comile and run tests.
 			for(String test : tests) {
-				TestCompiler compiler = new TestCompiler();
+				TestCompiler compiler = new TestCompiler(loader);
 				String testName = suite + "/" + test;
 				TestResult result = compiler.run(driver, baseUrl, logger, testName);
 				result.steps = compiler.getSteps();
@@ -162,7 +176,6 @@ public class TestSuite {
 			}
 		}
 	}
-
 
 
 	public void teardown() {

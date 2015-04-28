@@ -44,16 +44,17 @@ import java.lang.reflect.InvocationTargetException;
 
 public class TestCompiler extends GroovyShell {
 
+	GroovyClassLoader loader;
 	GroovyObject obj;
+
+	public TestCompiler(GroovyClassLoader loader) {
+		this.loader = loader;
+	}
 
 	public TestResult run(WebDriver driver, String baseUrl, Logger logger, String test) {
 		TestResult result = new TestResult();
 		result.testName = test;
 		try {
-			CompilerConfiguration configuration = new CompilerConfiguration();
-			configuration.setScriptBaseClass("Test");
-			ClassLoader parent = TestCompiler.class.getClassLoader();
-			GroovyClassLoader loader = new GroovyClassLoader(parent, configuration);
 			Class cls = loader.parseClass(new File("./tests/" + test + ".groovy"));
 
 			this.obj = (GroovyObject)cls.newInstance();

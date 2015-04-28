@@ -24,7 +24,11 @@ package com.michaelpidde.testflow.engine.util;
 
 import com.michaelpidde.testflow.engine.util.Logger;
 import com.michaelpidde.testflow.engine.util.TestStep;
+import com.michaelpidde.testflow.engine.util.PageObjectCompiler;
 
+import org.openqa.selenium.support.PageFactory;
+
+import java.io.File;
 import java.util.ArrayList;
 import java.lang.Thread;
 import org.openqa.selenium.WebDriver;
@@ -62,6 +66,11 @@ public abstract class Test extends Script {
 	public WebElement findElementByClass(String name) {
 		WebElement element = driver.findElement(By.className(name));
 		return element;
+	}
+
+
+	public Object loadPageObject(Class cls) {
+		return PageFactory.initElements(driver, cls);
 	}
 
 
