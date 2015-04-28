@@ -22,8 +22,10 @@ These are all handled by Maven if you choose to use it (why would you not?):
 
 * Selenium client and webdriver bindings
 * args4j
-* Jetty
 * Freemarker templating engine
+* Groovy
 * JavaMail
+* Jetty
+
 (Not currently used, but will be in the future:)
 * JDBC driver
