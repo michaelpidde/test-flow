@@ -23,11 +23,6 @@ public class PageObjectCompiler extends GroovyShell {
 				code = new GroovyCodeSource(new File(directory.getAbsolutePath() + "/" + file));
 				loader.parseClass(code, true);
 			}
-
-			Class[] classes = loader.getLoadedClasses();
-			for(Class cls : classes) {
-				System.out.println("Loaded class: " + cls.getName());
-			}
 		} catch(IOException e) {
 			System.out.println(e.toString());
 		}
