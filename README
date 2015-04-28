@@ -5,7 +5,8 @@ USAGE
 ----------------------------------------------------------------
 * You must copy the browser executables from /drivers to the same directory where your jar lives.
 
-* Run Maven compile with assembly:single to grab all dependencies and move some static files to the right place.
+* Run Maven compile with assembly:single to grab all dependencies and move some static files to the right place:
+mvn compile assembly:single
 
 * Run with:
 java -jar ./target/test-flow.jar
@@ -22,8 +23,10 @@ These are all handled by Maven if you choose to use it (why would you not?):
 
 * Selenium client and webdriver bindings
 * args4j
-* Jetty
 * Freemarker templating engine
+* Groovy
 * JavaMail
+* Jetty
+
 (Not currently used, but will be in the future:)
 * JDBC driver
