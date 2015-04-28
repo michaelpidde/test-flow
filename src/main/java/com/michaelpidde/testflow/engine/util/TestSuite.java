@@ -161,18 +161,31 @@ public class TestSuite {
 	public void runTests(HashSet<String> tests) {
 		// Only do this if there are no pre-test errors on the page.
 		if(runSuite) {
-			// Compile page object(s).
+			/* 
+			 * Compile page object(s).
+			 * This will return a TestResult object because, though it's not a UI test, 
+			 * it's still useful for the end user to see the Groovy compile error
+			 * in their test suite results. This also allows us to continue through the 
+			 * process and dispose of the webdriver instance so it doesn't become orphaned.
+			 */
 			File pageDirectory = new File("./tests/" + suite + "/pageObject");
-			PageObjectCompiler pageCompiler = new PageObjectCompiler(loader, pageDirectory);
+			PageObjectCompiler pageCompiler = new PageObjectCompiler(loader);
+			TestResult preCompile = pageCompiler.run(pageDirectory);
+			preCompile.setRunEnd();
 
-			// Comile and run tests.
-			for(String test : tests) {
-				TestCompiler compiler = new TestCompiler(loader);
-				String testName = suite + "/" + test;
-				TestResult result = compiler.run(driver, baseUrl, logger, testName);
-				result.steps = compiler.getSteps();
-				result.setRunEnd();
-				results.add(result);
+			if(preCompile.getPassed()) {
+				// Comile and run tests.
+				for(String test : tests) {
+					TestCompiler compiler = new TestCompiler(loader);
+					String testName = suite + "/" + test;
+					TestResult result = compiler.run(driver, baseUrl, logger, testName);
+					result.steps = compiler.getSteps();
+					result.setRunEnd();
+					results.add(result);
+				}
+			} else {
+				// Return pre-compile output.
+				results.add(preCompile);
 			}
 		}
 	}

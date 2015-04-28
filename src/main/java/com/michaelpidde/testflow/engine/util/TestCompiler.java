@@ -79,6 +79,10 @@ public class TestCompiler extends GroovyShell {
 			result.passed = false;
 			result.error = e.toString();
 			System.out.println(e.toString());
+		} catch (Exception e) {
+			result.passed = false;
+			result.error = e.toString();
+			System.out.println(e.toString());
 		}
 		return result;
 	}

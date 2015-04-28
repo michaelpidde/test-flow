@@ -1,6 +1,7 @@
 package com.michaelpidde.testflow.engine.util;
 
 import com.michaelpidde.testflow.engine.util.Directory;
+import com.michaelpidde.testflow.engine.util.TestResult;
 
 import java.io.File;
 import java.io.IOException;
@@ -14,7 +15,17 @@ import groovy.lang.GroovyShell;
 
 public class PageObjectCompiler extends GroovyShell {
 
-	public PageObjectCompiler(GroovyClassLoader loader, File directory) {
+	GroovyClassLoader loader;
+
+	public PageObjectCompiler(GroovyClassLoader loader) {
+		this.loader = loader;
+	}
+
+	public TestResult run(File directory) {
+		TestResult result = new TestResult();
+		result.passed = true;
+		result.testName = "None [PageObject pre-compile]";
+
 		try {
 			ArrayList<String> files = Directory.listDirectoryFiles(directory, ".groovy");
 			GroovyCodeSource code;
@@ -24,8 +35,16 @@ public class PageObjectCompiler extends GroovyShell {
 				loader.parseClass(code, true);
 			}
 		} catch(IOException e) {
+			result.passed = false;
+			result.error = e.toString();
+			System.out.println(e.toString());
+		} catch (Exception e) {
+			result.passed = false;
+			result.error = e.toString();
 			System.out.println(e.toString());
 		}
+
+		return result;
 	}
 
 }
