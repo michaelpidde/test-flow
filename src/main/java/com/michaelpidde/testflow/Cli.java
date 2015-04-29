@@ -41,16 +41,16 @@ public class Cli {
 	/*
 	 * Command line arguments
 	 */
-    @Option(name="-b", usage="Browser to test in.")
+    @Option(name="-b", usage="Browser to test in. [chrome|ff|ie]")
     private String browser;
 
-    @Option(name="-t", usage="List of tests to run.")
+    @Option(name="-t", usage="Comma separated list of tests to run.")
     private String tests;
 
-    @Option(name="-s", usage="Suite to look for tests in.")
-    private String suite;
+    @Option(name="-a", usage="Application to get tests in.")
+    private String app;
 
-    @Option(name="-u", usage="Base URL of site to be tested.")
+    @Option(name="-u", usage="Comma separated list of URLs of sites to be tested.")
     private String baseUrl = "";
 
     @Option(name="-e", handler=BooleanOptionHandler.class, usage="Send email.")
@@ -95,7 +95,7 @@ public class Cli {
         /*
          * Read in configuration.
          */
-        ConfigParser config = new ConfigParser("./tests/" + suite + "/Config.xml");
+        ConfigParser config = new ConfigParser("./tests/" + app + "/Config.xml");
         emailRecipients = config.getEmailRecipients();
         
     	// Set up logger
@@ -106,7 +106,7 @@ public class Cli {
     	
     	Iterator<String> urlIterator = urls.iterator();
     	while(urlIterator.hasNext()) {
-    		TestSuite testSuite = new TestSuite(logger, browser, (String)urlIterator.next(), suite, logResults);
+    		TestSuite testSuite = new TestSuite(logger, browser, (String)urlIterator.next(), app, logResults);
         	testSuite.setup();
         	testSuite.runTests(new HashSet<String>(Arrays.asList(tests.split(","))));
         	testSuite.teardown();

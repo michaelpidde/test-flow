@@ -54,7 +54,7 @@ public class TestSuite {
 	protected WebDriver driver;
 	protected String baseUrl;
 	protected String browser;
-	protected String suite;
+	protected String app;
 	protected Boolean logResults;
 	protected Logger logger;
 	protected boolean runSuite = true;
@@ -64,11 +64,11 @@ public class TestSuite {
 	protected GroovyClassLoader loader;
 
 
-	public TestSuite(Logger logger, String browser, String baseUrl, String suite, Boolean logScreens) {
+	public TestSuite(Logger logger, String browser, String baseUrl, String app, Boolean logScreens) {
 		this.logger = logger;
 		this.browser = browser;
 		this.baseUrl = baseUrl;
-		this.suite = suite;
+		this.app = app;
 		this.logResults = logScreens;
 
 		/* TODO: Clean this up. There should be a less gross way to do this. */
@@ -168,7 +168,7 @@ public class TestSuite {
 			 * in their test suite results. This also allows us to continue through the 
 			 * process and dispose of the webdriver instance so it doesn't become orphaned.
 			 */
-			File pageDirectory = new File("./tests/" + suite + "/pageObject");
+			File pageDirectory = new File("./tests/" + app + "/pageObject");
 			PageObjectCompiler pageCompiler = new PageObjectCompiler(loader);
 			TestResult preCompile = pageCompiler.run(pageDirectory);
 			preCompile.setRunEnd();
@@ -177,7 +177,7 @@ public class TestSuite {
 				// Comile and run tests.
 				for(String test : tests) {
 					TestCompiler compiler = new TestCompiler(loader);
-					String testName = suite + "/" + test;
+					String testName = app + "/" + test;
 					TestResult result = compiler.run(driver, baseUrl, logger, testName);
 					result.steps = compiler.getSteps();
 					result.setRunEnd();

@@ -126,7 +126,7 @@ public class PageHandler extends AbstractHandler {
 					
 					Cli cli = new Cli();
 
-					ArrayList<String> args = new ArrayList<String>(Arrays.asList("-e", "-s", selectedApp, "-b", selectedBrowser, "-u", 
+					ArrayList<String> args = new ArrayList<String>(Arrays.asList("-e", "-a", selectedApp, "-b", selectedBrowser, "-u", 
 						testDao.getBaseUrl(selectedApp), "-t", selectedTests));
 					if(logResults) {
 						args.add("-l");
