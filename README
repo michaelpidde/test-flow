@@ -3,6 +3,9 @@ This is a basic web GUI test automation framework utilizing Java and Selenium.
 
 USAGE
 ----------------------------------------------------------------
+* See wiki for test setup (https://github.com/michaelpidde/test-flow/wiki). 
+This program will not work unless this is done correctly.
+
 * You must copy the browser executables from /drivers to the same directory where your jar lives.
 
 * Run Maven compile with assembly:single to grab all dependencies and move some static files to the right place:
