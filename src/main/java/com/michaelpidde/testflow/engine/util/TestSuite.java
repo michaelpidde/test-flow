@@ -60,6 +60,8 @@ public class TestSuite {
 	protected boolean runSuite = true;
 	protected ArrayList<TestResult> results = new ArrayList<TestResult>();
 	protected String runPath = "";
+	protected String osFamily = "LIN";
+	protected String separator = "/";
 	protected DriverService service;
 	protected GroovyClassLoader loader;
 
@@ -71,18 +73,17 @@ public class TestSuite {
 		this.app = app;
 		this.logResults = logScreens;
 
-		/* TODO: Clean this up. There should be a less gross way to do this. */
+		// Figure out system OS.
+		if(System.getProperty("os.name").contains("Windows")) {
+			this.osFamily = "WIN";
+			this.separator = "\\";
+		}
+
+		// Get path based on compiled JAR file.
 		this.runPath = new java.io.File(
 			Cli.class.getProtectionDomain().getCodeSource().getLocation().getPath()
 		).toString().replace("%20", " ");
-
-		ArrayList<String> pathParts = new ArrayList<String>(Arrays.asList(runPath.split("/")));
-		pathParts.remove(pathParts.size()-1);
-		String path = "";
-		for(String part : pathParts) {
-			path += "/" + part;
-		}
-		this.runPath = path;
+		runPath = runPath.substring(0, runPath.lastIndexOf(separator));
 
 		// Set up class loader for Groovy compiling
 		CompilerConfiguration configuration = new CompilerConfiguration();
@@ -98,11 +99,8 @@ public class TestSuite {
 
 
 	public void setup() {
-		// Figure out system so we can load proper browser drivers.
-		String osFamily = "LIN";
 		String chromePath = "/chromedriver";
-		if(System.getProperty("os.name").contains("Windows")) {
-			osFamily = "WIN";
+		if(osFamily == "WIN") {
 			chromePath = ".\\chromedriver.exe";
 		}
 
