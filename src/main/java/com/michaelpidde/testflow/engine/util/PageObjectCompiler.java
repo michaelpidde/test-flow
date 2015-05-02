@@ -42,9 +42,9 @@ public class PageObjectCompiler extends GroovyShell {
 			result.passed = false;
 			result.error = e.toString();
 			System.out.println(e.toString());
+		} finally {
+			return result;
 		}
-
-		return result;
 	}
 
 }

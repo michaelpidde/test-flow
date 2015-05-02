@@ -80,17 +80,13 @@ public class XMLParser {
 			
 			Object result = expression.evaluate(xml, XPathConstants.NODESET);
 			nodes = (NodeList)result;
-		} catch(ParserConfigurationException e) {
+		} catch(ParserConfigurationException|SAXException|XPathExpressionException|
+			IOException e) {
+
 			System.out.println(e.toString());
-		} catch(SAXException e) {
-			System.out.println(e.toString());
-		} catch(XPathExpressionException e) {
-			System.out.println(e.toString());
-		} catch(IOException e) {
-			System.out.println(e.toString());
+		} finally {
+			return nodes;
 		}
-		
-		return nodes;
 	}
 
 

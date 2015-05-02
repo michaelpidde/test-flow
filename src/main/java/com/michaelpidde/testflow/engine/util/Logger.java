@@ -93,9 +93,7 @@ public class Logger {
 				String newName = prefix + String.valueOf(index) + new UID().toString().replace(":", "") + ".jpg";
 				Files.move(screenFile.toPath(), screenshotLocation.resolve(newName));
 				filename = screenshotLocation.resolve(newName).toString();
-			} catch(WebDriverException e) {
-				System.out.println(e);
-			} catch(IOException e) {
+			} catch(WebDriverException|IOException e) {
 				System.out.println(e);
 			}
 		}

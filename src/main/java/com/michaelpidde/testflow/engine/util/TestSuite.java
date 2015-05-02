@@ -121,9 +121,7 @@ public class TestSuite {
 					ieOptions.setCapability("ignoreProtectedModeSettings", true);
 					driver = new RemoteWebDriver(((InternetExplorerDriverService) service).getUrl(), ieOptions);
 					driver = new Augmenter().augment(driver);
-				} catch(NullPointerException e) {
-					System.out.println(e.toString());
-				} catch (IOException e) {
+				} catch(NullPointerException|IOException e) {
 					System.out.println(e.toString());
 				}
 			break;
@@ -139,9 +137,7 @@ public class TestSuite {
 					chromeOptions.setCapability("chrome.switches", Arrays.asList("--start-maximized"));
 					driver = new RemoteWebDriver(((ChromeDriverService) service).getUrl(), chromeOptions);
 					driver = new Augmenter().augment(driver);
-				} catch(NullPointerException e) {
-					System.out.println(e.toString());
-				} catch (IOException e) {
+				} catch(NullPointerException|IOException e) {
 					System.out.println(e.toString());
 				}
 			break;

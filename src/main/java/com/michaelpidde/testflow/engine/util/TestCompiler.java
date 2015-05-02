@@ -54,6 +54,7 @@ public class TestCompiler extends GroovyShell {
 	public TestResult run(WebDriver driver, String baseUrl, Logger logger, String test) {
 		TestResult result = new TestResult();
 		result.testName = test;
+		result.passed = false;
 		try {
 			Class cls = loader.parseClass(new File("./tests/" + test + ".groovy"));
 
@@ -63,28 +64,17 @@ public class TestCompiler extends GroovyShell {
 
 			Object[] runArgs = {};
 			result.passed = (boolean)obj.invokeMethod("run", runArgs);
-		} catch(IllegalAccessException e) {
-			result.passed = false;
+		} catch(IllegalAccessException|InstantiationException|IOException|
+			NoSuchElementException e) {
+
 			result.error = e.toString();
 			System.out.println(e.toString());
-		} catch(InstantiationException e) {
-			result.passed = false;
+		} catch(Exception e) {
 			result.error = e.toString();
 			System.out.println(e.toString());
-		} catch(IOException e) {
-			result.passed = false;
-			result.error = e.toString();
-			System.out.println(e.toString());
-		} catch (NoSuchElementException e) {
-			result.passed = false;
-			result.error = e.toString();
-			System.out.println(e.toString());
-		} catch (Exception e) {
-			result.passed = false;
-			result.error = e.toString();
-			System.out.println(e.toString());
+		} finally {
+			return result;
 		}
-		return result;
 	}
 
 	public ArrayList<TestStep> getSteps() {
@@ -92,14 +82,11 @@ public class TestCompiler extends GroovyShell {
 		try {
 			Method getSteps = obj.getClass().getMethod("getSteps");
 			result = (ArrayList<TestStep>)getSteps.invoke(obj);
-		} catch(NoSuchMethodException e) {
+		} catch(NoSuchMethodException|IllegalAccessException|InvocationTargetException e) {
 			System.out.println(e.toString());
-		} catch(IllegalAccessException e) {
-			System.out.println(e.toString());
-		} catch(InvocationTargetException e) {
-			System.out.println(e.toString());
+		} finally {
+			return result;
 		}
-		return result;
 	}
 
 }

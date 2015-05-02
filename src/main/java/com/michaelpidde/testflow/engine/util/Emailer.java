@@ -50,11 +50,9 @@ public class Emailer {
 			message.setSubject("Regression Testing Results");
 			message.setText(messageBody);
 			Transport.send(message);
-		} catch(AddressException e) {
+		} catch(AddressException|UnsupportedEncodingException e) {
 			System.out.println(e.toString());
 		} catch(MessagingException e) {
-			System.out.println(e.toString());
-		} catch(UnsupportedEncodingException e) {
 			System.out.println(e.toString());
 		}
 	}
