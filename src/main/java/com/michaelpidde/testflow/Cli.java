@@ -27,7 +27,7 @@ import com.michaelpidde.testflow.engine.util.TestSuite;
 import com.michaelpidde.testflow.engine.util.Logger;
 import com.michaelpidde.testflow.engine.util.Emailer;
 import com.michaelpidde.testflow.engine.formatter.*;
-import com.michaelpidde.testflow.engine.xml.ConfigParser;
+import com.michaelpidde.testflow.engine.util.Config;
 
 import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.args4j.CmdLineParser;
@@ -95,7 +95,7 @@ public class Cli {
         /*
          * Read in configuration.
          */
-        ConfigParser config = new ConfigParser("./tests/" + app + "/Config.xml");
+        Config config = new Config("./tests/" + app + "/config.json");
         emailRecipients = config.getEmailRecipients();
         
     	// Set up logger

@@ -20,9 +20,9 @@ java -cp ./target/test-flow.jar com.michaelpidde.testflow.Cli -h
 
 DEPENDENCIES
 ----------------------------------------------------------------
-Java and Javac must be version 1.7 or above.
+You must be running Java 8 for some of the dependencies to run correctly.
 
-These are all handled by Maven if you choose to use it (why would you not?):
+These are all handled by Maven:
 
 * Selenium client and webdriver bindings
 * args4j
@@ -30,6 +30,7 @@ These are all handled by Maven if you choose to use it (why would you not?):
 * Groovy
 * JavaMail
 * Jetty
+* JSON
 
 (Not currently used, but will be in the future:)
 * JDBC driver

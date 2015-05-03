@@ -23,7 +23,7 @@
 package com.michaelpidde.testflow.client.frontend;
 
 import com.michaelpidde.testflow.Cli;
-import com.michaelpidde.testflow.engine.xml.TestDAO;
+import com.michaelpidde.testflow.engine.util.Config;
 import com.michaelpidde.testflow.engine.util.Directory;
 import com.michaelpidde.testflow.engine.util.TestResult;
 import com.michaelpidde.testflow.engine.formatter.FormatterHTML;
@@ -77,7 +77,7 @@ public class PageHandler extends AbstractHandler {
 		Map<String, Serializable> root = new HashMap<String, Serializable>();
 		root.put("title", "TestFlow");
 		Template template;
-		TestDAO testDao = new TestDAO("./tests/Tests.xml");
+		Config testConfig;
 		
 		switch(action) {
 
@@ -95,7 +95,8 @@ public class PageHandler extends AbstractHandler {
 			break;
 
 			case "ListSuites":
-				ArrayList<String> suites = testDao.getSuites(selectedApp);
+				testConfig = new Config("./tests/" + selectedApp + "/config.json");
+				ArrayList<String> suites = testConfig.getSuites();
 				File testDirectory = new File("./tests/" + selectedApp);
 				ArrayList<String> tests = Directory.listDirectoryFiles(testDirectory, ".groovy");
 				// Remove file extension.
@@ -114,6 +115,7 @@ public class PageHandler extends AbstractHandler {
 			break;
 
 			case "run":
+				testConfig = new Config("./tests/" + selectedApp + "/config.json");
 				String runSuite = request.getParameter("suite");
 				if(runSuite != null) {
 					// TODO Implement suite logic.
@@ -127,7 +129,7 @@ public class PageHandler extends AbstractHandler {
 					Cli cli = new Cli();
 
 					ArrayList<String> args = new ArrayList<String>(Arrays.asList("-e", "-a", selectedApp, "-b", selectedBrowser, "-u", 
-						testDao.getBaseUrl(selectedApp), "-t", selectedTests));
+						testConfig.getBaseUrl(), "-t", selectedTests));
 					if(logResults) {
 						args.add("-l");
 					}
