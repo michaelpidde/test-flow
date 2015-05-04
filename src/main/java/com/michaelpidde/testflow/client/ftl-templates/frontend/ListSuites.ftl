@@ -3,15 +3,18 @@
 		<input type="hidden" name="selectedTests" id="selectedTests" value="" />
 		<input type="hidden" name="app" id="app" value="${app}" />
 		
-		<fieldset><legend>Suites</legend>
-			<#list suites as suite>
-				<button class="suiteButton" id="${suite}">${suite}</button>
-			</#list>
-		</fieldset>
+		<#if suites?size gt 0>
+			<fieldset><legend>Suites</legend>
+				<#list suites as suite>
+					<button class="suiteButton" id="${suite}">${suite}</button>
+				</#list>
+			</fieldset>
 		
 		<br />
 		
 		<fieldset><legend>Roll Your Own</legend>
+		</#if>
+		
 			<table cellpadding="1" cellspacing="0" border="1">
 				<tr>
 					<th>Test</th>
@@ -60,6 +63,8 @@
 			</table>
 			<br />
 			<input type="submit" id="submit" name="submit" value="Run Tests" />
+		<#if suites?size gt 0>
 		</fieldset>
+		</#if>
 	</form>
 <#include "Footer.ftl">
