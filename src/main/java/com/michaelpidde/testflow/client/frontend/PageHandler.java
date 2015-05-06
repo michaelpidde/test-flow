@@ -123,15 +123,22 @@ public class PageHandler extends AbstractHandler {
 					String selectedTests = request.getParameter("selectedTests");
 					String selectedBrowser = request.getParameter("browser");
 					//String selectedEnvironment = request.getParameter("environment");
+					Boolean logDatabase = checkboxToBoolean(request.getParameter("logDatabase"));
 					Boolean logResults = checkboxToBoolean(request.getParameter("logResults"));
-					//Boolean sendMail =  checkboxToBoolean(request.getParameter("sendMail"));
+					Boolean sendMail = checkboxToBoolean(request.getParameter("sendMail"));
 					
 					Cli cli = new Cli();
 
-					ArrayList<String> args = new ArrayList<String>(Arrays.asList("-e", "-a", selectedApp, "-b", selectedBrowser, "-u", 
+					ArrayList<String> args = new ArrayList<String>(Arrays.asList("-a", selectedApp, "-b", selectedBrowser, "-u", 
 						testConfig.getBaseUrl(), "-t", selectedTests));
 					if(logResults) {
 						args.add("-l");
+					}
+					if(sendMail) {
+						args.add("-e");
+					}
+					if(logDatabase) {
+						args.add("-d");
 					}
 					
 					ArrayList<ArrayList<TestResult>> suiteResults = cli.runSuite(args.toArray(new String[args.size()]));

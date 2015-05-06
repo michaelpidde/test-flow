@@ -68,7 +68,6 @@ public class TestCompiler extends GroovyShell {
 			NoSuchElementException e) {
 
 			result.error = e.toString();
-			System.out.println(e.toString());
 		} catch(Exception e) {
 			result.error = e.toString();
 			System.out.println(e.toString());

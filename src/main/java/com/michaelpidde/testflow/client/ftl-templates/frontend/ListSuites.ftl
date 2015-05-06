@@ -56,8 +56,20 @@
 				</tr>
 				<tr>
 					<td>
-						<label for="logResults">Log Results: </label>
+						<label for="logDatabase">Database Logging: </label>
+						<input type="checkbox" name="logDatabase" id="logDatabase" checked="checked" />
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<label for="logResults">Flat File Log Results: </label>
 						<input type="checkbox" name="logResults" id="logResults" checked="checked" />
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<label for="sendMail">Email Results: </label>
+						<input type="checkbox" name="sendMail" id="sendMail" checked="checked" />
 					</td>
 				</tr>
 			</table>

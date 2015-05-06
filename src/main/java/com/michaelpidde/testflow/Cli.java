@@ -59,6 +59,9 @@ public class Cli {
     @Option(name="-l", handler=BooleanOptionHandler.class, usage="Log results to flat files.")
     private Boolean logResults = false;
 
+    @Option(name="-d", handler=BooleanOptionHandler.class, usage="Log results to database.")
+    private Boolean logDatabase = false;
+
     @Option(name="-h", usage="Show help.", forbids={"-b", "-t", "-s", "-u", "-e", "-l"})
     private Boolean showHelp = false;
 
@@ -120,6 +123,10 @@ public class Cli {
         	FormatterFileSystem formatterFileSystem = new FormatterFileSystem();
         	formatterFileSystem.setLogLocation(logger.getLogLocation());
         	formatterFileSystem.formatSuite(suiteResults);
+        }
+
+        if(logDatabase) {
+            System.out.println("Log to database.");
         }
         
         // Console output
