@@ -66,7 +66,14 @@ public class TestSuite {
 	protected GroovyClassLoader loader;
 
 
-	public TestSuite(Logger logger, String browser, String baseUrl, String app, Boolean logScreens) {
+	public TestSuite(
+		Logger logger, 
+		String browser, 
+		String baseUrl, 
+		String app, 
+		Boolean logScreens
+	) {
+
 		this.logger = logger;
 		this.browser = browser;
 		this.baseUrl = baseUrl;
@@ -119,7 +126,10 @@ public class TestSuite {
 					((InternetExplorerDriverService) service).start();
 					DesiredCapabilities ieOptions = DesiredCapabilities.internetExplorer();
 					ieOptions.setCapability("ignoreProtectedModeSettings", true);
-					driver = new RemoteWebDriver(((InternetExplorerDriverService) service).getUrl(), ieOptions);
+					driver = new RemoteWebDriver(
+						((InternetExplorerDriverService) service).getUrl(), 
+						ieOptions
+					);
 					driver = new Augmenter().augment(driver);
 				} catch(NullPointerException|IOException e) {
 					System.out.println(e.toString());
@@ -134,8 +144,14 @@ public class TestSuite {
 						.build();
 					((ChromeDriverService) service).start();
 					DesiredCapabilities chromeOptions = DesiredCapabilities.chrome();
-					chromeOptions.setCapability("chrome.switches", Arrays.asList("--start-maximized"));
-					driver = new RemoteWebDriver(((ChromeDriverService) service).getUrl(), chromeOptions);
+					chromeOptions.setCapability(
+						"chrome.switches", 
+						Arrays.asList("--start-maximized")
+					);
+					driver = new RemoteWebDriver(
+						((ChromeDriverService) service).getUrl(), 
+						chromeOptions
+					);
 					driver = new Augmenter().augment(driver);
 				} catch(NullPointerException|IOException e) {
 					System.out.println(e.toString());

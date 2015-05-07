@@ -107,7 +107,13 @@ public class Cli {
     	
     	Iterator<String> urlIterator = urls.iterator();
     	while(urlIterator.hasNext()) {
-    		TestSuite testSuite = new TestSuite(logger, browser, (String)urlIterator.next(), app, logFilesystem);
+    		TestSuite testSuite = new TestSuite(
+                logger, 
+                browser, 
+                (String)urlIterator.next(), 
+                app, 
+                logFilesystem
+            );
         	testSuite.setup();
         	testSuite.runTests(new HashSet<String>(Arrays.asList(tests.split(","))));
         	testSuite.teardown();
@@ -158,7 +164,11 @@ public class Cli {
     }
 
 
-    private void logToFilesystem(final ArrayList<ArrayList<TestResult>> suiteResults, final Path logLocation) {
+    private void logToFilesystem(
+        final ArrayList<ArrayList<TestResult>> suiteResults, 
+        final Path logLocation
+    ) {
+        
         FormatterFileSystem formatterFileSystem = new FormatterFileSystem();
         formatterFileSystem.setLogLocation(logLocation);
         formatterFileSystem.formatSuite(suiteResults);

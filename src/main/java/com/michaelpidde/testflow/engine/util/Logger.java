@@ -90,7 +90,10 @@ public class Logger {
 			File screenFile;
 			try {
 				screenFile = ((TakesScreenshot)driver).getScreenshotAs(OutputType.FILE);
-				String newName = prefix + String.valueOf(index) + new UID().toString().replace(":", "") + ".jpg";
+				String newName = prefix 
+					+ String.valueOf(index) 
+					+ new UID().toString().replace(":", "") 
+					+ ".jpg";
 				Files.move(screenFile.toPath(), screenshotLocation.resolve(newName));
 				filename = screenshotLocation.resolve(newName).toString();
 			} catch(WebDriverException|IOException e) {

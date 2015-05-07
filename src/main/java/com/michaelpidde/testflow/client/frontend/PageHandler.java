@@ -72,23 +72,18 @@ public class PageHandler extends AbstractHandler {
 		PrintWriter writer = response.getWriter();
 		
 		switch(action) {
-
-			case "ListApps":
-				listAppsHandler(writer);
+		case "ListApps":
+			listAppsHandler(writer);
 			break;
-
-			case "ListSuites":
-				listSuitesHandler(writer, request);
+		case "ListSuites":
+			listSuitesHandler(writer, request);
 			break;
-
-			case "run":
-				runHandler(writer, request);
+		case "run":
+			runHandler(writer, request);
 			break;
-
-			case "exit":
-				System.exit(0);
+		case "exit":
+			System.exit(0);
 			break;
-
 		}
 	}
 
@@ -160,7 +155,9 @@ public class PageHandler extends AbstractHandler {
 				args.add("-d");
 			}
 			
-			ArrayList<ArrayList<TestResult>> suiteResults = cli.runSuite(args.toArray(new String[args.size()]));
+			ArrayList<ArrayList<TestResult>> suiteResults = cli.runSuite(args.toArray(
+				new String[args.size()])
+			);
 			FormatterHTML formatter = new FormatterHTML();
 			String body = formatter.formatSuite(suiteResults);
 			root.put("body", body);

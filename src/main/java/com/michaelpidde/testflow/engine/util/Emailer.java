@@ -45,7 +45,10 @@ public class Emailer {
 		try {
 			Message message = new MimeMessage(session);
 			// TODO Put the from address below in the config XML. 
-			message.setFrom(new InternetAddress("michael.pidde@gmail.com", "Regression Testing Notifier"));
+			message.setFrom(new InternetAddress(
+				"michael.pidde@gmail.com", 
+				"Regression Testing Notifier"
+			));
 			message.addRecipient(Message.RecipientType.TO, new InternetAddress(address, ""));
 			message.setSubject("Regression Testing Results");
 			message.setText(messageBody);
