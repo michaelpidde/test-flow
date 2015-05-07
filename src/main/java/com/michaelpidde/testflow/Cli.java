@@ -36,6 +36,7 @@ import org.kohsuke.args4j.OptionHandlerFilter;
 import org.kohsuke.args4j.spi.BooleanOptionHandler;
 
 import java.util.*;
+import java.nio.file.Path;
 
 public class Cli {
 	/*
@@ -57,7 +58,7 @@ public class Cli {
     private Boolean sendMail = false;
 
     @Option(name="-l", handler=BooleanOptionHandler.class, usage="Log results to flat files.")
-    private Boolean logResults = false;
+    private Boolean logFilesystem = false;
 
     @Option(name="-d", handler=BooleanOptionHandler.class, usage="Log results to database.")
     private Boolean logDatabase = false;
@@ -78,7 +79,6 @@ public class Cli {
     }
 
 
-
     public ArrayList<ArrayList<TestResult>> runSuite(String[] args) {
         CmdLineParser parser = new CmdLineParser(this);
         ArrayList<ArrayList<TestResult>> suiteResults = new ArrayList<ArrayList<TestResult>>();
@@ -95,54 +95,72 @@ public class Cli {
             System.exit(0);
         }
 
-        /*
-         * Read in configuration.
-         */
+        // Read in config
         Config config = new Config("./tests/" + app + "/config.json");
-        emailRecipients = config.getEmailRecipients();
+        this.emailRecipients = config.getEmailRecipients();
         
     	// Set up logger
-        logger = new Logger(logResults);
+        this.logger = new Logger(logFilesystem);
         
     	// Process multiple baseURLs
     	HashSet<String> urls = new HashSet<String>(Arrays.asList(baseUrl.split(",")));
     	
     	Iterator<String> urlIterator = urls.iterator();
     	while(urlIterator.hasNext()) {
-    		TestSuite testSuite = new TestSuite(logger, browser, (String)urlIterator.next(), app, logResults);
+    		TestSuite testSuite = new TestSuite(logger, browser, (String)urlIterator.next(), app, logFilesystem);
         	testSuite.setup();
         	testSuite.runTests(new HashSet<String>(Arrays.asList(tests.split(","))));
         	testSuite.teardown();
         	suiteResults.add(testSuite.getSuiteResults());
     	}
         
-        /*
-         * Output formatters
-         */
-        if(logResults) {
-        	FormatterFileSystem formatterFileSystem = new FormatterFileSystem();
-        	formatterFileSystem.setLogLocation(logger.getLogLocation());
-        	formatterFileSystem.formatSuite(suiteResults);
+        doLogging(suiteResults);
+        
+        return suiteResults;
+    }
+
+
+    private void doLogging(final ArrayList<ArrayList<TestResult>> suiteResults) {
+        if(logFilesystem) {
+            logToFilesystem(suiteResults, logger.getLogLocation());
         }
 
         if(logDatabase) {
-            System.out.println("Log to database.");
+            logToDatabase(suiteResults);
         }
-        
-        // Console output
-        FormatterText textFormatter = new FormatterText();
-        System.out.println(textFormatter.formatSuite(suiteResults));
  
         if(sendMail) {
-        	FormatterEmail formatterEmail = new FormatterEmail();
-        	String messageBody = formatterEmail.formatSuite(suiteResults);
-        	for(String email : emailRecipients) {
-        		System.out.println("Sending email to: " + email);
-        		//Emailer.send(email, messageBody);
-        	}
+            logToEmail(suiteResults);
         }
-        
-        
-        return suiteResults;
+
+        logToConsole(suiteResults);
+    }
+
+
+    private void logToConsole(final ArrayList<ArrayList<TestResult>> suiteResults) {
+        FormatterText textFormatter = new FormatterText();
+        System.out.println(textFormatter.formatSuite(suiteResults));
+    }
+
+
+    private void logToEmail(final ArrayList<ArrayList<TestResult>> suiteResults) {
+        FormatterEmail formatterEmail = new FormatterEmail();
+        String messageBody = formatterEmail.formatSuite(suiteResults);
+        for(String email : emailRecipients) {
+            System.out.println("Sending email to: " + email);
+            //Emailer.send(email, messageBody);
+        }
+    }
+
+
+    private void logToDatabase(final ArrayList<ArrayList<TestResult>> suiteResults) {
+        System.out.println("Log to database.");
+    }
+
+
+    private void logToFilesystem(final ArrayList<ArrayList<TestResult>> suiteResults, final Path logLocation) {
+        FormatterFileSystem formatterFileSystem = new FormatterFileSystem();
+        formatterFileSystem.setLogLocation(logLocation);
+        formatterFileSystem.formatSuite(suiteResults);
     }
 }

@@ -53,8 +53,14 @@ import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.handler.AbstractHandler;
 
 public class PageHandler extends AbstractHandler {
-	public void handle(String target, Request baseRequest, HttpServletRequest request, HttpServletResponse response) 
-	throws IOException, ServletException {
+
+	public void handle(
+		String target, 
+		Request baseRequest, 
+		HttpServletRequest request, 
+		HttpServletResponse response
+	) throws IOException, ServletException {
+
 		response.setContentType("text/html;charset=utf-8");
 		response.setStatus(HttpServletResponse.SC_OK);
 		baseRequest.setHandled(true);
@@ -62,96 +68,21 @@ public class PageHandler extends AbstractHandler {
 		// Set up param defaults
 		String action = request.getParameter("action");
 		action = (action == null) ? "ListApps" : action;
-		String selectedApp = request.getParameter("app");
-		selectedApp = (selectedApp == null) ? "" : selectedApp;
 
 		PrintWriter writer = response.getWriter();
-		// Set up Freemarker template config
-		Configuration config = new Configuration();
-		config.setClassForTemplateLoading(this.getClass(), "/ftl-templates/frontend");
-		config.setObjectWrapper(new DefaultObjectWrapper());
-		config.setDefaultEncoding("utf-8");
-		config.setTemplateExceptionHandler(TemplateExceptionHandler.HTML_DEBUG_HANDLER);
-		
-		// Set up data for template
-		Map<String, Serializable> root = new HashMap<String, Serializable>();
-		root.put("title", "TestFlow");
-		Template template;
-		Config testConfig;
 		
 		switch(action) {
 
 			case "ListApps":
-				File directory = new File("./tests");
-				ArrayList<String> apps = Directory.listDirectories(directory, ".git");
-				root.put("apps", apps);
-				
-				template = config.getTemplate("ListApps.ftl");
-				try {
-					template.process(root, writer);
-				} catch(TemplateException e) {
-					System.out.println(e.toString());
-				}
+				listAppsHandler(writer);
 			break;
 
 			case "ListSuites":
-				testConfig = new Config("./tests/" + selectedApp + "/config.json");
-				ArrayList<String> suites = testConfig.getSuites();
-				File testDirectory = new File("./tests/" + selectedApp);
-				ArrayList<String> tests = Directory.listDirectoryFiles(testDirectory, ".groovy");
-				// Remove file extension.
-				for(int i = 0; i < tests.size(); i++) {
-					tests.set(i, tests.get(i).replace(".groovy", ""));
-				}
-				root.put("app", selectedApp);
-				root.put("suites", suites); 
-				root.put("tests", tests);
-				template = config.getTemplate("ListSuites.ftl");
-				try {
-					template.process(root, writer);
-				} catch(TemplateException e) {
-					System.out.println(e.toString());
-				}
+				listSuitesHandler(writer, request);
 			break;
 
 			case "run":
-				testConfig = new Config("./tests/" + selectedApp + "/config.json");
-				String runSuite = request.getParameter("suite");
-				if(runSuite != null) {
-					// TODO Implement suite logic.
-				} else {
-					String selectedTests = request.getParameter("selectedTests");
-					String selectedBrowser = request.getParameter("browser");
-					//String selectedEnvironment = request.getParameter("environment");
-					Boolean logDatabase = checkboxToBoolean(request.getParameter("logDatabase"));
-					Boolean logResults = checkboxToBoolean(request.getParameter("logResults"));
-					Boolean sendMail = checkboxToBoolean(request.getParameter("sendMail"));
-					
-					Cli cli = new Cli();
-
-					ArrayList<String> args = new ArrayList<String>(Arrays.asList("-a", selectedApp, "-b", selectedBrowser, "-u", 
-						testConfig.getBaseUrl(), "-t", selectedTests));
-					if(logResults) {
-						args.add("-l");
-					}
-					if(sendMail) {
-						args.add("-e");
-					}
-					if(logDatabase) {
-						args.add("-d");
-					}
-					
-					ArrayList<ArrayList<TestResult>> suiteResults = cli.runSuite(args.toArray(new String[args.size()]));
-					FormatterHTML formatter = new FormatterHTML();
-					String body = formatter.formatSuite(suiteResults);
-					root.put("body", body);
-					template = config.getTemplate("ListResults.ftl");
-					try {
-						template.process(root, writer);
-					} catch(TemplateException e) {
-						System.out.println(e.toString());
-					}
-				}
+				runHandler(writer, request);
 			break;
 
 			case "exit":
@@ -159,6 +90,123 @@ public class PageHandler extends AbstractHandler {
 			break;
 
 		}
+	}
+
+
+	private void listAppsHandler(final PrintWriter writer) {
+		File directory = new File("./tests");
+		Map<String, Serializable> root = getTemplateHashmap();
+
+		ArrayList<String> apps = Directory.listDirectories(directory, ".git");
+		root.put("apps", apps);
+
+		renderTemplate("ListApps.ftl", root, writer);
+	}
+
+
+	private void listSuitesHandler(final PrintWriter writer, final HttpServletRequest request) {
+		Map<String, Serializable> root = getTemplateHashmap();
+
+		String selectedApp = getSelectedApp(request.getParameter("app"));
+		Config testConfig = new Config("./tests/" + selectedApp + "/config.json");
+		ArrayList<String> suites = testConfig.getSuites();
+		File testDirectory = new File("./tests/" + selectedApp);
+		ArrayList<String> tests = Directory.listDirectoryFiles(testDirectory, ".groovy");
+
+		// Remove file extension.
+		for(int i = 0; i < tests.size(); i++) {
+			tests.set(i, tests.get(i).replace(".groovy", ""));
+		}
+		root.put("app", selectedApp);
+		root.put("suites", suites); 
+		root.put("tests", tests);
+
+		renderTemplate("ListSuites.ftl", root, writer);
+	}
+
+
+	private void runHandler(final PrintWriter writer, final HttpServletRequest request) {
+		Map<String, Serializable> root = getTemplateHashmap();
+
+		String selectedApp = getSelectedApp(request.getParameter("app"));
+		Config testConfig = new Config("./tests/" + selectedApp + "/config.json");
+
+		String runSuite = request.getParameter("suite");
+		if(runSuite != null) {
+			// TODO Implement suite logic.
+		} else {
+			String selectedTests = request.getParameter("selectedTests");
+			String selectedBrowser = request.getParameter("browser");
+			//String selectedEnvironment = request.getParameter("environment");
+			Boolean logDatabase = checkboxToBoolean(request.getParameter("logDatabase"));
+			Boolean logResults = checkboxToBoolean(request.getParameter("logResults"));
+			Boolean sendMail = checkboxToBoolean(request.getParameter("sendMail"));
+			
+			Cli cli = new Cli();
+
+			ArrayList<String> args = new ArrayList<String>(Arrays.asList(
+				"-a", selectedApp, 
+				"-b", selectedBrowser, 
+				"-u", testConfig.getBaseUrl(), 
+				"-t", selectedTests
+			));
+			if(logResults) {
+				args.add("-l");
+			}
+			if(sendMail) {
+				args.add("-e");
+			}
+			if(logDatabase) {
+				args.add("-d");
+			}
+			
+			ArrayList<ArrayList<TestResult>> suiteResults = cli.runSuite(args.toArray(new String[args.size()]));
+			FormatterHTML formatter = new FormatterHTML();
+			String body = formatter.formatSuite(suiteResults);
+			root.put("body", body);
+			
+			renderTemplate("ListResults.ftl", root, writer);
+		}
+	}
+
+
+	private Map<String, Serializable> getTemplateHashmap() {
+		Map<String, Serializable> root = new HashMap<String, Serializable>();
+		root.put("title", "TestFlow");
+		return root;
+	}
+
+
+	private Configuration getTemplateConfiguration() {
+		Configuration config = new Configuration();
+		config.setClassForTemplateLoading(this.getClass(), "/ftl-templates/frontend");
+		config.setObjectWrapper(new DefaultObjectWrapper());
+		config.setDefaultEncoding("utf-8");
+		config.setTemplateExceptionHandler(TemplateExceptionHandler.HTML_DEBUG_HANDLER);
+		return config;
+	}
+
+
+	private void renderTemplate(
+		final String name, 
+		final Map<String, Serializable> vars, 
+		final PrintWriter writer
+	) {
+
+		Configuration config = getTemplateConfiguration();
+		try {
+			Template template = config.getTemplate(name);
+			template.process(vars, writer);
+		} catch(TemplateException e) {
+			System.out.println(e.toString());
+		} catch(java.io.IOException e) {
+			System.out.println(e.toString());
+		}
+	}
+
+
+	private String getSelectedApp(final String selectedApp) {
+		return (selectedApp == null) ? "" : selectedApp;
 	}
 	
 	
