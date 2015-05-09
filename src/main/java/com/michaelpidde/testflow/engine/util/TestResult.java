@@ -47,6 +47,9 @@ public class TestResult {
 	public String getTestName() {
 		return testName;
 	}
+	public ArrayList<TestStep> getSteps() {
+		return steps;
+	}
 
 
 
