@@ -25,6 +25,7 @@ package com.michaelpidde.testflow.engine.util;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.rmi.server.UID;
@@ -42,10 +43,10 @@ public class Logger {
 
 
 
-	public Logger(Boolean logResults) {
+	public Logger(Boolean logResults, String root) {
 		this.logResults = logResults;
 		if(logResults) {
-			setLogLocation();
+			setLogLocation(root);
 			setScreenshotLocation();
 		}
 	}
@@ -58,9 +59,13 @@ public class Logger {
 
 
 
-	private void setLogLocation() {
+	private void setLogLocation(String root) {
 		try {
-			logLocation = Files.createTempDirectory(null);
+			logLocation = Files.createDirectory(
+				Paths.get(root).resolve(
+					String.valueOf(System.currentTimeMillis())
+				)
+			);
 		} catch(IOException e) {
 			System.out.println(e);
 		}

@@ -100,7 +100,7 @@ public class Cli {
         this.emailRecipients = config.getEmailRecipients();
         
     	// Set up logger
-        this.logger = new Logger(logFilesystem);
+        this.logger = new Logger(logFilesystem, config.getLogPath());
         
     	// Process multiple baseURLs
     	HashSet<String> urls = new HashSet<String>(Arrays.asList(baseUrl.split(",")));
