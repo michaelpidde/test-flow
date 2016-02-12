@@ -3,7 +3,7 @@
  *
  * This file is part of TestFlow.
  *
- * Copyright (C) 2014-2015 Michael Pidde <michael.pidde@gmail.com>
+ * Copyright (C) 2014-2016 Michael Pidde <michael.pidde@gmail.com>
  *
  * TestFlow is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
