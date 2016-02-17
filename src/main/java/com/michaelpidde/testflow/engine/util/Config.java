@@ -52,10 +52,15 @@ public class Config {
 	public String getLogPath() {
 		String path = (String)src.get("logPath");
 		if(path.startsWith("~" + File.separator)) {
-			return System.getProperty("user.home") + File.separator + path.substring(2);
-		} else {
-			return path;
+			path = System.getProperty("user.home") + File.separator + path.substring(2);
 		}
+		
+		File filePath = new File(path);
+		if(!filePath.exists()) {
+			filePath.mkdir();
+		}
+
+		return path;
 	}
 
 	public ArrayList<String> getEmailRecipients() {
