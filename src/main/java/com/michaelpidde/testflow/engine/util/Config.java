@@ -22,6 +22,8 @@
 
 package com.michaelpidde.testflow.engine.util;
 
+import com.michaelpidde.testflow.engine.database.Datasource;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -69,6 +71,17 @@ public class Config {
 
 	public ArrayList<String> getSuites() {
 		return getConfigList("suites");
+	}
+
+	public Datasource getLoggingDatasource() {
+		JSONObject loggingConfig = src.getJSONObject("loggingDatasource");
+		return new Datasource(
+			(String)loggingConfig.get("type"),
+			(String)loggingConfig.get("url"),
+			(String)loggingConfig.get("username"),
+			(String)loggingConfig.get("password"),
+			(String)loggingConfig.get("database")
+		);
 	}
 
 	private ArrayList<String> getConfigList(String node) {

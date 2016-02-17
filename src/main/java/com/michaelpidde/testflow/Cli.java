@@ -29,6 +29,8 @@ import com.michaelpidde.testflow.engine.util.Emailer;
 import com.michaelpidde.testflow.engine.formatter.*;
 import com.michaelpidde.testflow.engine.util.Config;
 
+import com.michaelpidde.testflow.engine.database.MySql;
+
 import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.args4j.CmdLineParser;
 import org.kohsuke.args4j.Option;
@@ -98,6 +100,9 @@ public class Cli {
         // Read in config
         Config config = new Config("./tests/" + app + "/config.json");
         this.emailRecipients = config.getEmailRecipients();
+
+        // Test mysql...
+        MySql db = new MySql(config);
         
     	// Set up logger
         this.logger = new Logger(logFilesystem, config.getLogPath());
