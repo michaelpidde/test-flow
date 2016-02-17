@@ -51,10 +51,11 @@ public class Config {
 
 	public String getLogPath() {
 		String path = (String)src.get("logPath");
-		if(path.startsWith("~" + File.separator)) {
+		if(path.startsWith("~")) {
 			path = System.getProperty("user.home") + File.separator + path.substring(2);
 		}
 		
+		System.out.println(path);
 		File filePath = new File(path);
 		if(!filePath.exists()) {
 			filePath.mkdir();
