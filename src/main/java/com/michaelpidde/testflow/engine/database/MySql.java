@@ -23,7 +23,7 @@
 package com.michaelpidde.testflow.engine.database;
 
 import com.michaelpidde.testflow.engine.database.Datasource;
-import com.michaelpidde.testflow.engine.util.Config;
+import com.michaelpidde.testflow.engine.config.IConfig;
 import com.michaelpidde.testflow.engine.util.TestResult;
 
 import java.util.ArrayList;
@@ -36,10 +36,10 @@ import java.sql.ResultSet;
 
 public class MySql implements IDatabase {
 	private Connection connection;
-	private Config config;
+	private IConfig config;
 	private Datasource datasource;
 
-	public MySql(Config config) {
+	public MySql(IConfig config) {
 		this.config = config;
 		this.datasource = config.getLoggingDatasource();
 
@@ -56,7 +56,20 @@ public class MySql implements IDatabase {
 	}
 
 	@Override
-	public void insertResult(TestResult result) {}
+	public void insertResult(TestResult result) {
+		Statement statement = null;
+		ResultSet queryResult = null;
+
+		try {
+			statement = this.connection.createStatement();
+			String query = "insert into testRuns (testId, passed, timeElapsed, steps)"
+				+ " values ("
+				+ "";
+			queryResult = statement.executeQuery(query);
+		} catch(SQLException e) {
+			System.out.println(e.getMessage());
+		}
+	}
 
 	@Override
 	public void insertSuiteRun(ArrayList<ArrayList<TestResult>> suite) {}

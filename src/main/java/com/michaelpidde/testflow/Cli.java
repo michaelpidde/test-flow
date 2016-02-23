@@ -27,7 +27,8 @@ import com.michaelpidde.testflow.engine.util.TestSuite;
 import com.michaelpidde.testflow.engine.util.Logger;
 import com.michaelpidde.testflow.engine.util.Emailer;
 import com.michaelpidde.testflow.engine.formatter.*;
-import com.michaelpidde.testflow.engine.util.Config;
+import com.michaelpidde.testflow.engine.config.IConfig;
+import com.michaelpidde.testflow.engine.config.Config;
 
 import com.michaelpidde.testflow.engine.database.MySql;
 
@@ -98,7 +99,7 @@ public class Cli {
         }
 
         // Read in config
-        Config config = new Config("./tests/" + app + "/config.json");
+        IConfig config = Config.get("./tests/" + app + "/config.json");
         this.emailRecipients = config.getEmailRecipients();
 
         // Test mysql...

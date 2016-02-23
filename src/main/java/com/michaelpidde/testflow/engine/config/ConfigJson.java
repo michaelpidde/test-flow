@@ -20,7 +20,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-package com.michaelpidde.testflow.engine.util;
+package com.michaelpidde.testflow.engine.config;
 
 import com.michaelpidde.testflow.engine.database.Datasource;
 
@@ -33,11 +33,11 @@ import java.nio.file.Paths;
 import java.nio.file.Files;
 import java.io.IOException;
 
-public class Config {
+public class ConfigJson implements IConfig {
 
 	JSONObject src;
 
-	public Config(String file) {
+	public ConfigJson(String file) {
 		try {
 			this.src = new JSONObject(
 				new String(Files.readAllBytes(Paths.get(file)))
@@ -71,6 +71,10 @@ public class Config {
 
 	public ArrayList<String> getSuites() {
 		return getConfigList("suites");
+	}
+
+	public String getLogType() {
+		return (String)src.get("logType");
 	}
 
 	public Datasource getLoggingDatasource() {

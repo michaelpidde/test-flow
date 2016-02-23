@@ -23,7 +23,8 @@
 package com.michaelpidde.testflow.client.frontend;
 
 import com.michaelpidde.testflow.Cli;
-import com.michaelpidde.testflow.engine.util.Config;
+import com.michaelpidde.testflow.engine.config.IConfig;
+import com.michaelpidde.testflow.engine.config.Config;
 import com.michaelpidde.testflow.engine.util.Directory;
 import com.michaelpidde.testflow.engine.util.TestResult;
 import com.michaelpidde.testflow.engine.formatter.FormatterHTML;
@@ -53,6 +54,13 @@ import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.handler.AbstractHandler;
 
 public class PageHandler extends AbstractHandler {
+
+	private String logType;
+
+	public PageHandler() {
+		IConfig rootConfig = Config.get("./tests/config.json");
+		this.logType = rootConfig.getLogType();
+	}
 
 	public void handle(
 		String target, 
@@ -88,6 +96,15 @@ public class PageHandler extends AbstractHandler {
 	}
 
 
+	private IConfig getConfig(String path) {
+		if(logType.equals("json")) {
+			return Config.get(path);
+		} else {
+			return Config.get(this.logType);
+		}
+	}
+
+
 	private void listAppsHandler(final PrintWriter writer) {
 		File directory = new File("./tests");
 		Map<String, Serializable> root = getTemplateHashmap();
@@ -103,7 +120,7 @@ public class PageHandler extends AbstractHandler {
 		Map<String, Serializable> root = getTemplateHashmap();
 
 		String selectedApp = getSelectedApp(request.getParameter("app"));
-		Config testConfig = new Config("./tests/" + selectedApp + "/config.json");
+		IConfig testConfig = getConfig("./tests/" + selectedApp + "/config.json");
 		ArrayList<String> suites = testConfig.getSuites();
 		File testDirectory = new File("./tests/" + selectedApp);
 		ArrayList<String> tests = Directory.listDirectoryFiles(testDirectory, ".groovy");
@@ -124,7 +141,7 @@ public class PageHandler extends AbstractHandler {
 		Map<String, Serializable> root = getTemplateHashmap();
 
 		String selectedApp = getSelectedApp(request.getParameter("app"));
-		Config testConfig = new Config("./tests/" + selectedApp + "/config.json");
+		IConfig testConfig = getConfig("./tests/" + selectedApp + "/config.json");
 
 		String runSuite = request.getParameter("suite");
 		if(runSuite != null) {
